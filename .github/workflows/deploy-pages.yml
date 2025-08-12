@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages (gh-pages branch)
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -6,14 +6,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,6 +29,9 @@ jobs:
 
       - name: Install deps
         run: npm ci
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Prepare BASE_PATH and optional CNAME
         shell: bash
@@ -47,17 +52,23 @@ jobs:
       - name: Build
         env:
           BASE_PATH: ${{ env.BASE_PATH }}
-        run: npm run build
+        run: |
+          npm run build
+          node scripts/postbuild.mjs
+          if [[ -n "${CUSTOM_DOMAIN}" ]]; then echo "$CUSTOM_DOMAIN" > build/client/CNAME; fi
 
-      - name: Write CNAME (optional)
-        if: env.CUSTOM_DOMAIN != ''
-        run: echo "$CUSTOM_DOMAIN" > build/client/CNAME
-
-      - name: Publish to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/client
-          publish_branch: gh-pages
-          enable_jekyll: false
-          force_orphan: true
+          path: build/client
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
