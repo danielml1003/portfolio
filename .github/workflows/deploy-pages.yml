@@ -28,22 +28,30 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Determine BASE_PATH
-        id: base
+      - name: Prepare BASE_PATH and optional CNAME
         shell: bash
         run: |
-          OWNER_REPO=${{ github.repository }}
-          REPO_NAME=${OWNER_REPO#*/}
-          if [[ "${REPO_NAME}" != "${{ github.repository_owner }}.github.io" ]]; then
-            echo "BASE_PATH=/${REPO_NAME}/" >> $GITHUB_ENV
-          else
+          if [[ -n "${{ vars.CUSTOM_DOMAIN }}" ]]; then
+            echo "CUSTOM_DOMAIN=${{ vars.CUSTOM_DOMAIN }}" >> $GITHUB_ENV
             echo "BASE_PATH=/" >> $GITHUB_ENV
+          else
+            OWNER_REPO=${{ github.repository }}
+            REPO_NAME=${OWNER_REPO#*/}
+            if [[ "${REPO_NAME}" != "${{ github.repository_owner }}.github.io" ]]; then
+              echo "BASE_PATH=/${REPO_NAME}/" >> $GITHUB_ENV
+            else
+              echo "BASE_PATH=/" >> $GITHUB_ENV
+            fi
           fi
 
       - name: Build
         env:
           BASE_PATH: ${{ env.BASE_PATH }}
         run: npm run build
+
+      - name: Write CNAME (optional)
+        if: env.CUSTOM_DOMAIN != ''
+        run: echo "$CUSTOM_DOMAIN" > build/client/CNAME
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v3
