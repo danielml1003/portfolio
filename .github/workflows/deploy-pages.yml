@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub Pages (gh-pages branch)
 
 on:
   push:
@@ -6,16 +6,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,48 +28,28 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - name: Determine BASE_PATH
         id: base
         shell: bash
         run: |
           OWNER_REPO=${{ github.repository }}
           REPO_NAME=${OWNER_REPO#*/}
-          # Only set BASE_PATH for project pages (not user/org pages)
           if [[ "${REPO_NAME}" != "${{ github.repository_owner }}.github.io" ]]; then
-            echo "BASE_PATH=/${REPO_NAME}/" >> $GITHUB_OUTPUT
+            echo "BASE_PATH=/${REPO_NAME}/" >> $GITHUB_ENV
           else
-            echo "BASE_PATH=/" >> $GITHUB_OUTPUT
+            echo "BASE_PATH=/" >> $GITHUB_ENV
           fi
 
       - name: Build
         env:
-          BASE_PATH: ${{ steps.base.outputs.BASE_PATH }}
+          BASE_PATH: ${{ env.BASE_PATH }}
         run: npm run build
 
-      - name: Create 404.html
-        run: node scripts/postbuild.mjs
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          path: build/client
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/client
+          publish_branch: gh-pages
+          enable_jekyll: false
+          force_orphan: true
