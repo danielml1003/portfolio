@@ -1,0 +1,14 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "Portfolio Website",
+      "description": "My personal portfolio website built with React, TypeScript, and Tailwind CSS. Features a modern design, smooth animations, and responsive layout.",
+      "github_url": "https://github.com/danielml1003/portfolio",
+      "demo_url": "https://danielml1003.github.io/portfolio",
+      "image_url": "/projects/portfolio.png",
+      "technologies": ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      "featured": true
+    }
+  ]
+}
