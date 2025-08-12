@@ -30,7 +30,22 @@ jobs:
       - name: Install deps
         run: npm ci
 
+      - name: Determine BASE_PATH
+        id: base
+        shell: bash
+        run: |
+          OWNER_REPO=${{ github.repository }}
+          REPO_NAME=${OWNER_REPO#*/}
+          # Only set BASE_PATH for project pages (not user/org pages)
+          if [[ "${REPO_NAME}" != "${{ github.repository_owner }}.github.io" ]]; then
+            echo "BASE_PATH=/${REPO_NAME}/" >> $GITHUB_OUTPUT
+          else
+            echo "BASE_PATH=/" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build
+        env:
+          BASE_PATH: ${{ steps.base.outputs.BASE_PATH }}
         run: npm run build
 
       - name: Create 404.html
