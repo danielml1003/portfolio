@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,6 +15,37 @@ export default function Contact() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  // Trigger a celebratory animation when the form is submitted successfully
+  useEffect(() => {
+    if (!submitted) return;
+
+    (async () => {
+      const mod = await import('animejs');
+      const animeFn: any = (mod as any).default ?? (mod as any);
+
+      // Pop-in the check circle
+      animeFn({
+        targets: '#success-check',
+        scale: [0, 1],
+        rotate: [0, 10],
+        easing: 'easeOutElastic(1, .6)',
+        duration: 900
+      });
+
+      // Fire confetti dots outward from center
+      animeFn({
+        targets: '.confetti-dot',
+        translateX: () => (Math.random() - 0.5) * 440,
+        translateY: () => (Math.random() - 0.5) * 280,
+        scale: [{ value: [0, 1], duration: 200 }, { value: 0, delay: 400, duration: 600 }],
+        opacity: [{ value: 1, duration: 200 }, { value: 0, delay: 300, duration: 700 }],
+        easing: 'easeOutCubic',
+        delay: (_el: Element, i: number) => i * 25,
+        duration: 900
+      });
+    })();
+  }, [submitted]);
 
   const contactInfo = [
     {
@@ -90,9 +120,26 @@ This message was sent from your portfolio contact form.
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center max-w-2xl mx-auto"
+            className="relative text-center max-w-2xl mx-auto"
           >
-            <div className="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            {/* Confetti canvas */}
+            <div className="pointer-events-none absolute inset-0 overflow-visible">
+              {Array.from({ length: 40 }).map((_, i) => (
+                <span
+                  key={i}
+                  className="confetti-dot absolute left-1/2 top-1/2 block"
+                  style={{
+                    width: Math.random() > 0.5 ? 10 : 6,
+                    height: Math.random() > 0.5 ? 10 : 6,
+                    borderRadius: '9999px',
+                    background: ['#60A5FA', '#A78BFA', '#34D399', '#F59E0B', '#F472B6'][i % 5],
+                    transform: 'translate(-50%, -50%)'
+                  }}
+                />
+              ))}
+            </div>
+
+            <div id="success-check" className="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30">
               <CheckCircle className="w-12 h-12 text-white" />
             </div>
             <h2 className="text-3xl font-bold mb-4">Message Sent Successfully!</h2>
