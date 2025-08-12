@@ -185,7 +185,7 @@ This message was sent from your portfolio contact form.
             viewport={{ once: false, amount: 0.3 }}
             className="space-y-8"
           >
-            <div>
+            <div className="text-right">
               <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
               <p className="text-gray-300 mb-8 leading-relaxed">
                 Whether you have a project in mind, want to discuss opportunities, 
@@ -193,7 +193,7 @@ This message was sent from your portfolio contact form.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-items-end">
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={info.title}
@@ -201,13 +201,13 @@ This message was sent from your portfolio contact form.
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: false, amount: 0.3 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-colors duration-300"
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-colors duration-300 text-right w-full"
                 >
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center justify-end gap-4">
                     <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                       <info.icon className="w-6 h-6 text-white" />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <h4 className="font-semibold text-white">{info.title}</h4>
                       {info.href ? (
                         <a 
