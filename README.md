@@ -1,5 +1,7 @@
 # Portfolio
 
+[Live Demo](https://danielml1003.github.io/portfolio/)
+
 A personal portfolio built with React Router, Vite, TypeScript, and TailwindCSS.
 
 ## Development

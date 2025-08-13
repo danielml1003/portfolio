@@ -1,19 +1,15 @@
-name: Deploy to GitHub Pages
+name: Deploy to gh-pages branch
 
 on:
+  push:
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,9 +23,6 @@ jobs:
 
       - name: Install deps
         run: npm ci
-
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
 
       - name: Prepare BASE_PATH and optional CNAME
         shell: bash
@@ -53,20 +46,14 @@ jobs:
         run: |
           npm run build
           node scripts/postbuild.mjs
+          mkdir -p build/client
+          touch build/client/.nojekyll
           if [[ -n "${CUSTOM_DOMAIN}" ]]; then echo "$CUSTOM_DOMAIN" > build/client/CNAME; fi
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: build/client
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/client
+          publish_branch: gh-pages
+          keep_files: false
