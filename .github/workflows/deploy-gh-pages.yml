@@ -44,6 +44,7 @@ jobs:
         env:
           BASE_PATH: ${{ env.BASE_PATH }}
         run: |
+          echo "Using BASE_PATH=${BASE_PATH}"
           npm run build
           node scripts/postbuild.mjs
           mkdir -p build/client
