@@ -50,6 +50,7 @@ jobs:
       - name: Build
         env:
           BASE_PATH: ${{ env.BASE_PATH }}
+          VITE_BUILD_VERSION: ${{ github.sha }}
         run: |
           npm run build
           node scripts/postbuild.mjs

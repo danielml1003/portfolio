@@ -43,6 +43,7 @@ jobs:
       - name: Build
         env:
           BASE_PATH: ${{ env.BASE_PATH }}
+          VITE_BUILD_VERSION: ${{ github.sha }}
         run: |
           echo "Using BASE_PATH=${BASE_PATH}"
           npm run build

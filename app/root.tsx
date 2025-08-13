@@ -24,11 +24,29 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // Cache-busting version from build (set in CI as VITE_BUILD_VERSION)
+  const buildVersion = (import.meta as any).env?.VITE_BUILD_VERSION ?? "1";
+  const cacheBusterScript = `(() => {
+    try {
+      const isGitHubPages = location.hostname.endsWith('.github.io');
+      if (!isGitHubPages) return;
+      const params = new URLSearchParams(location.search);
+      if (!params.has('v')) {
+        params.set('v', ${JSON.stringify(String(Date.now()))}.slice(0,0) + ${JSON.stringify(String(buildVersion))});
+        const url = new URL(location.href);
+        url.search = params.toString();
+        // Replace so back button doesn't go to the non-versioned URL
+        location.replace(url.toString());
+      }
+    } catch {}
+  })();`;
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Add a tiny script early to ensure first load uses a cache-busting query param on GitHub Pages */}
+        <script dangerouslySetInnerHTML={{ __html: cacheBusterScript }} />
         <Meta />
         <Links />
       </head>
