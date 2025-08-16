@@ -4,7 +4,7 @@ import{w as a,q as i,p as t,M as c,L as l,S as u,t as p,O as h,i as d}from"./chu
       if (!isGitHubPages) return;
       const params = new URLSearchParams(location.search);
       if (!params.has('v')) {
-        params.set('v', ${JSON.stringify(String(Date.now()))}.slice(0,0) + ${JSON.stringify(String("dafeb08aee9174d023d90e45ec11605322ebbe7f"))});
+        params.set('v', ${JSON.stringify(String(Date.now()))}.slice(0,0) + ${JSON.stringify(String("8c59784655e95dfc7c4756118fcd39fd34212175"))});
         const url = new URL(location.href);
         url.search = params.toString();
         // Replace so back button doesn't go to the non-versioned URL
