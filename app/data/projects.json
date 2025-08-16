@@ -2,11 +2,31 @@
   "projects": [
     {
       "id": "1",
+      "name": "shop-saver",
+  "description": "Full-stack app with separate backend, frontend, and service modules. Built with Python, TypeScript, and Rust and orchestrated with Docker (docker-compose, init.sql).",
+      "github_url": "https://github.com/danielml1003/shop-saver",
+      "demo_url": null,
+  "image_url": "/projects/shop-saver.svg",
+      "technologies": ["Python", "TypeScript", "Rust"],
+      "featured": true
+    },
+    {
+      "id": "2",
+      "name": "music-genre-classification",
+  "description": "Python-based experiments for music genre classification with simple client/server scripts and a small QML UI prototype.",
+      "github_url": "https://github.com/danielml1003/music-genre-classification",
+      "demo_url": null,
+  "image_url": "/projects/music-genre-classification.svg",
+      "technologies": ["Python", "QML"],
+      "featured": true
+    },
+    {
+      "id": "3",
       "name": "Portfolio Website",
-      "description": "My personal portfolio website built with React, TypeScript, and Tailwind CSS. Features a modern design, smooth animations, and responsive layout.",
+  "description": "Personal portfolio built with React Router, Vite, TypeScript, and Tailwind CSS; deployed to GitHub Pages.",
       "github_url": "https://github.com/danielml1003/portfolio",
       "demo_url": "https://danielml1003.github.io/portfolio",
-      "image_url": "/projects/portfolio.png",
+  "image_url": "/projects/portfolio.svg",
       "technologies": ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
       "featured": true
     }

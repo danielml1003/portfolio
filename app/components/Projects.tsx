@@ -11,13 +11,20 @@ interface ProjectType {
   name: string;
   description: string;
   github_url?: string;
-  demo_url?: string;
+  demo_url?: string | null;
   image_url?: string;
   technologies: string[];
   featured: boolean;
 }
 
 export default function Projects() {
+  const resolveAssetUrl = (path?: string) => {
+    if (!path) return undefined;
+    if (/^https?:\/\//i.test(path)) return path;
+    // Ensure assets work under GitHub Pages base path
+    const base = (import.meta as any).env?.BASE_URL || import.meta.env.BASE_URL;
+    return `${base}${path.replace(/^\//, '')}`;
+  };
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +50,7 @@ export default function Projects() {
   }
 
   return (
-    <section className="py-20 bg-white">
+  <section id="projects" className="min-h-screen snap-start py-20 bg-white">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -89,9 +96,13 @@ export default function Projects() {
                   {project.image_url && (
                     <div className="aspect-video bg-gradient-to-br from-blue-50 to-indigo-50 rounded-t-lg overflow-hidden">
                       <img 
-                        src={project.image_url} 
+                        src={resolveAssetUrl(project.image_url)} 
                         alt={project.name}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Hide broken image and keep the gradient placeholder
+                          (e.currentTarget as HTMLImageElement).style.display = 'none';
+                        }}
                       />
                     </div>
                   )}
@@ -127,11 +138,11 @@ export default function Projects() {
                           Code
                         </Button>
                       )}
-                      {project.demo_url && (
+            {project.demo_url && typeof project.demo_url === 'string' && (
                         <Button 
                           size="sm"
                           className="flex-1 bg-blue-600 hover:bg-blue-700"
-                          onClick={() => window.open(project.demo_url, '_blank')}
+              onClick={() => project.demo_url && window.open(project.demo_url as string, '_blank')}
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Demo

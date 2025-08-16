@@ -10,10 +10,11 @@ export default function Portfolio() {
   useEffect(() => {
     // Smooth scrolling for anchor links
     const handleScroll = (e: MouseEvent) => {
-      const target = e.target as HTMLAnchorElement;
-      if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+      const node = e.target as Element | null;
+      const anchor = node?.closest?.('a[href^="#"]') as HTMLAnchorElement | null;
+      if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
         e.preventDefault();
-        const href = target.getAttribute('href');
+        const href = anchor.getAttribute('href');
         if (href) {
           const scrollTarget = document.querySelector(href);
           if (scrollTarget) {
@@ -30,7 +31,7 @@ export default function Portfolio() {
   return (
     <AnimatePresence mode="wait">
       <motion.div 
-        className="min-h-screen"
+        className="min-h-screen overflow-x-hidden snap-y snap-mandatory"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

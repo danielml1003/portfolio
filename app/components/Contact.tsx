@@ -115,7 +115,7 @@ This message was sent from your portfolio contact form.
 
   if (submitted) {
     return (
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+  <section id="contact" className="min-h-screen snap-start py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
         <div className="container mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -159,7 +159,7 @@ This message was sent from your portfolio contact form.
   }
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
+  <section id="contact" className="min-h-screen snap-start py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -185,7 +185,7 @@ This message was sent from your portfolio contact form.
             viewport={{ once: false, amount: 0.3 }}
             className="space-y-8"
           >
-            <div className="text-right">
+            <div className="text-left">
               <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
               <p className="text-gray-300 mb-8 leading-relaxed">
                 Whether you have a project in mind, want to discuss opportunities, 
@@ -193,7 +193,7 @@ This message was sent from your portfolio contact form.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {contactInfo.map((info, index) => (
                 <motion.div
                   key={info.title}
@@ -201,9 +201,9 @@ This message was sent from your portfolio contact form.
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   viewport={{ once: false, amount: 0.3 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-colors duration-300 text-right w-full"
+                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-colors duration-300 text-left w-full"
                 >
-                  <div className="flex items-center justify-end gap-4">
+                  <div className="flex items-center justify-start gap-4">
                     <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                       <info.icon className="w-6 h-6 text-white" />
                     </div>
@@ -212,14 +212,14 @@ This message was sent from your portfolio contact form.
                       {info.href ? (
                         <a 
                           href={info.href} 
-                          className="text-blue-300 hover:text-blue-200 transition-colors duration-200"
+                          className="text-blue-300 hover:text-blue-200 transition-colors duration-200 break-all"
                           target="_blank"
                           rel="noopener noreferrer"
                         >
                           {info.value}
                         </a>
                       ) : (
-                        <p className="text-gray-300">{info.value}</p>
+                        <p className="text-gray-300 break-all">{info.value}</p>
                       )}
                     </div>
                   </div>

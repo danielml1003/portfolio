@@ -6,6 +6,15 @@ import { Github, Linkedin, Mail, Download, MapPin } from 'lucide-react';
 import AnimatedText from './AnimatedText';
 
 export default function Hero() {
+  const scrollToAbout: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    // Ensure smooth scroll even if a global handler isn't attached
+    const href = e.currentTarget.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const el = document.querySelector(href);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
   const socialLinks = [
     {
       icon: Github,
@@ -25,9 +34,9 @@ export default function Hero() {
   ];
 
   return (
-    <section className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white relative overflow-hidden">
+  <section className="min-h-screen snap-start bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white relative overflow-hidden">
       {/* Enhanced animated background elements */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl"
           animate={{
@@ -112,9 +121,11 @@ export default function Hero() {
               transition={{ delay: 1.2 }}
               className="flex flex-col sm:flex-row gap-4"
             >
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
-                <Mail className="w-5 h-5 mr-2" />
-                Get In Touch
+              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
+                <a href="#contact">
+                  <Mail className="w-5 h-5 mr-2" />
+                  Get In Touch
+                </a>
               </Button>
               <Button size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 text-lg">
                 <Download className="w-5 h-5 mr-2" />
@@ -202,11 +213,13 @@ export default function Hero() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: false }}
         transition={{ delay: 1.8 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
       >
-        <div className="w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-blue-400 rounded-full mt-2 animate-bounce"></div>
-        </div>
+  <a href="#about" onClick={scrollToAbout} aria-label="Scroll to About section" className="block">
+          <div className="w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center cursor-pointer hover:border-blue-300 transition-colors">
+            <div className="w-1 h-3 bg-blue-400 rounded-full mt-2 animate-bounce"></div>
+          </div>
+        </a>
       </motion.div>
     </section>
   );
