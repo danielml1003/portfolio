@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FolderGit2, ExternalLink, ArrowUpRight, Lock } from "lucide-react";
 import ScrambleText from "./ScrambleText";
+import TypeOnView from "./TypeOnView";
 import data from "@/data/projects.json";
 
 interface Language {
@@ -38,7 +39,7 @@ function RepoCard({ project, index }: { project: ProjectType; index: number }) {
         delay: index * 0.08,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group relative flex flex-col border border-line bg-panel hover:border-acc/50 hover:-translate-y-1 transition-all duration-300 font-mono"
+      className="group sheen relative flex flex-col border border-line bg-panel hover:border-acc/50 hover:-translate-y-1 transition-all duration-300 font-mono"
     >
       {/* header */}
       <div className="flex items-center gap-2.5 px-5 pt-5">
@@ -85,10 +86,18 @@ function RepoCard({ project, index }: { project: ProjectType; index: number }) {
       {project.languages && (
         <div className="px-5 pt-4">
           <div className="flex h-1.5 overflow-hidden bg-raise">
-            {project.languages.map((lang) => (
-              <span
+            {project.languages.map((lang, li) => (
+              <motion.span
                 key={lang.name}
-                style={{ width: `${lang.pct}%`, background: lang.color }}
+                initial={{ width: 0 }}
+                whileInView={{ width: `${lang.pct}%` }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.9,
+                  delay: 0.25 + li * 0.12,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                style={{ background: lang.color }}
                 title={`${lang.name} ${lang.pct}%`}
               />
             ))}
@@ -160,9 +169,7 @@ export default function Projects() {
     <section id="projects" className="relative py-24 sm:py-32 bg-bg2 border-y border-line">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
-          <p className="text-[13px] text-dim mb-2">
-            <span className="text-acc">$</span> git log --oneline --featured
-          </p>
+          <TypeOnView text="git log --oneline --featured" />
           <ScrambleText
             text="SELECTED WORK"
             as="h2"
