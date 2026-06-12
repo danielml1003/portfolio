@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FolderGit2, ExternalLink, ArrowUpRight } from "lucide-react";
+import { FolderGit2, ExternalLink, ArrowUpRight, Lock } from "lucide-react";
 import ScrambleText from "./ScrambleText";
 import data from "@/data/projects.json";
 
@@ -21,6 +21,7 @@ interface ProjectType {
   languages?: Language[];
   year?: string;
   status?: string;
+  visibility?: string;
   featured: boolean;
 }
 
@@ -41,12 +42,22 @@ function RepoCard({ project, index }: { project: ProjectType; index: number }) {
     >
       {/* header */}
       <div className="flex items-center gap-2.5 px-5 pt-5">
-        <FolderGit2 className="w-4 h-4 text-acc shrink-0" />
+        {project.visibility === "private" ? (
+          <Lock className="w-4 h-4 text-amber shrink-0" />
+        ) : (
+          <FolderGit2 className="w-4 h-4 text-acc shrink-0" />
+        )}
         <h3 className="text-ink font-semibold text-[15px] truncate">
           {project.name}
         </h3>
-        <span className="ml-auto shrink-0 text-[10px] uppercase tracking-wider border border-line2 text-dim px-1.5 py-0.5">
-          public
+        <span
+          className={`ml-auto shrink-0 text-[10px] uppercase tracking-wider border px-1.5 py-0.5 ${
+            project.visibility === "private"
+              ? "border-amber/40 text-amber"
+              : "border-line2 text-dim"
+          }`}
+        >
+          {project.visibility === "private" ? "private" : "public"}
         </span>
       </div>
 
@@ -117,10 +128,18 @@ function RepoCard({ project, index }: { project: ProjectType; index: number }) {
             href={project.demo_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 px-5 py-3 text-dim hover:text-acc hover:bg-raise transition-colors border-l border-line"
+            className={`flex items-center gap-1.5 px-5 py-3 text-dim hover:text-acc hover:bg-raise transition-colors ${
+              project.github_url ? "border-l border-line" : ""
+            }`}
           >
             live demo <ExternalLink className="w-3.5 h-3.5" />
           </a>
+        )}
+        {!project.github_url && !project.demo_url && (
+          <span className="flex items-center gap-1.5 px-5 py-3 text-faint">
+            <Lock className="w-3.5 h-3.5" />
+            source: client-owned
+          </span>
         )}
         <span className="ml-auto pr-5 flex items-center gap-2 text-faint">
           <span
@@ -128,7 +147,8 @@ function RepoCard({ project, index }: { project: ProjectType; index: number }) {
               project.status === "active" ? "bg-mint" : "bg-amber"
             }`}
           />
-          {project.status} · {project.year}
+          {project.status}
+          {project.year ? ` · ${project.year}` : ""}
         </span>
       </div>
     </motion.article>

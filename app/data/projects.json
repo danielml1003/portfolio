@@ -15,10 +15,24 @@
       ],
       "year": "2025",
       "status": "active",
+      "visibility": "public",
       "featured": true
     },
     {
       "id": "2",
+      "name": "winwin-shop",
+      "tagline": "client e-commerce build",
+      "description": "Freelance work for a real client — an e-commerce shop built and shipped end-to-end: storefront, catalog and checkout flow. The code belongs to the client, so the repo stays private — but I'm happy to walk through the build.",
+      "github_url": null,
+      "demo_url": null,
+      "technologies": ["e-commerce", "freelance", "full-stack"],
+      "year": "2026",
+      "status": "delivered",
+      "visibility": "private",
+      "featured": true
+    },
+    {
+      "id": "3",
       "name": "music-genre-classification",
       "tagline": "ML audio experiments",
       "description": "Python experiments for classifying music by genre — client/server scripts for inference plus a small QML UI prototype on top.",
@@ -31,22 +45,7 @@
       ],
       "year": "2024",
       "status": "shipped",
-      "featured": true
-    },
-    {
-      "id": "3",
-      "name": "portfolio",
-      "tagline": "the site you're reading",
-      "description": "This workstation. React Router 7 + Vite + Tailwind 4, a hand-rolled ASCII field renderer, a working in-page terminal, and zero UI templates.",
-      "github_url": "https://github.com/danielml1003/portfolio",
-      "demo_url": "https://danielml1003.github.io/portfolio",
-      "technologies": ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
-      "languages": [
-        { "name": "TypeScript", "pct": 91, "color": "#3178C6" },
-        { "name": "CSS", "pct": 9, "color": "#663399" }
-      ],
-      "year": "2026",
-      "status": "active",
+      "visibility": "public",
       "featured": true
     }
   ]
