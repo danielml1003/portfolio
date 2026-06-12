@@ -36,6 +36,7 @@ const HELP: Array<[string, string]> = [
   ["whoami", "identify yourself"],
   ["ls", "list files"],
   ["cat <file>", "read a file (try about.md)"],
+  ["git log", "my journey, condensed"],
   ["projects", "featured repositories"],
   ["skills", "tech stack summary"],
   ["socials", "where to find me"],
@@ -107,10 +108,33 @@ export default function TerminalSection() {
           <Out>
             guest — but the more interesting answer:{"\n"}
             <span className="text-ink">Daniel Baravik</span>, full-stack
-            developer. python · typescript · rust. based in Israel, open to
-            work.
+            developer. NOC @ Unilink by day, building with python · typescript
+            · rust by night. based in Israel, open to dev roles.
           </Out>
         );
+        break;
+
+      case "git":
+        if (arg.startsWith("log")) {
+          push(
+            <Out>
+              <span className="text-acc">a1b2c3f</span> init: java — checkers,
+              chess (2019){"\n"}
+              <span className="text-cyan">c4d5e6f</span> work: full-stack dev @
+              LS-TECH (2020-21){"\n"}
+              <span className="text-amber">1d8f2c9</span> service: IT
+              technician, IDF (2022-24){"\n"}
+              <span className="text-acc">d4e5f6a</span> feat: shop-saver —
+              py/ts/rust (2025){"\n"}
+              <span className="text-cyan">f0a1b2c</span> work: NOC @ Unilink
+              (now){"\n"}
+              <span className="text-acc">HEAD</span> chore(career): your repo
+              here?
+            </Out>
+          );
+        } else {
+          push(<Out>this terminal only knows one trick: git log</Out>);
+        }
         break;
 
       case "ls":
