@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
+import TypeOnView from "./TypeOnView";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
 
 type Entry = { id: number; node: React.ReactNode };
@@ -185,9 +186,12 @@ export default function TerminalSection() {
       case "skills":
         push(
           <Out>
-            TypeScript/React ▓▓▓▓▓▓▓▓░░ · Python ▓▓▓▓▓▓▓▓░░ · Node
-            ▓▓▓▓▓▓▓░░░{"\n"}SQL ▓▓▓▓▓▓░░░░ · Docker ▓▓▓▓▓▓░░░░ · Rust
-            ▓▓▓▓░░░░░░ (climbing)
+            <span className="text-mint">[daily_driver]</span> typescript ·
+            react · python · node · tailwind · git{"\n"}
+            <span className="text-cyan">[comfortable]</span> postgres · mongo ·
+            docker · express · linux{"\n"}
+            <span className="text-amber">[leveling_up]</span> rust · system
+            design · ci/cd
           </Out>
         );
         break;
@@ -335,10 +339,7 @@ export default function TerminalSection() {
     <section id="terminal" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-4xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
-          <p className="text-[13px] text-dim mb-2">
-            <span className="text-acc">$</span> ssh guest@daniel — no password
-            needed
-          </p>
+          <TypeOnView text="ssh guest@daniel — no password needed" />
           <ScrambleText
             text="TRY THE TERMINAL"
             as="h2"

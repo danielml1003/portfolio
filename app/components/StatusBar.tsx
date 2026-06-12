@@ -6,6 +6,7 @@ import { GitBranch, ArrowUp } from "lucide-react";
  */
 export default function StatusBar() {
   const [time, setTime] = useState<string>("--:--:--");
+  const [scrollPos, setScrollPos] = useState<string>("TOP");
 
   useEffect(() => {
     const fmt = new Intl.DateTimeFormat("en-GB", {
@@ -18,6 +19,18 @@ export default function StatusBar() {
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
+  }, []);
+
+  // vim-style position indicator: TOP / NN% / BOT
+  useEffect(() => {
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? window.scrollY / max : 0;
+      setScrollPos(p < 0.02 ? "TOP" : p > 0.98 ? "BOT" : `${Math.round(p * 100)}%`);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
@@ -39,6 +52,9 @@ export default function StatusBar() {
         <div className="flex items-center gap-4">
           <span className="hidden sm:inline text-faint">israel</span>
           <span className="tabular-nums">{time} IDT</span>
+          <span className="tabular-nums text-faint w-9 text-right">
+            {scrollPos}
+          </span>
           <a
             href="#top"
             aria-label="Back to top"

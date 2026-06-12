@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send } from "lucide-react";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
+import TypeOnView from "./TypeOnView";
 import SendEmail from "@/integrations/Core/SendEmail";
 
 const inputCls =
@@ -40,9 +41,7 @@ export default function Contact() {
     <section id="contact" className="relative py-24 sm:py-32 bg-bg2 border-t border-line">
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
-          <p className="text-[13px] text-dim mb-2">
-            <span className="text-acc">$</span> ./send_message --to daniel
-          </p>
+          <TypeOnView text="./send_message --to daniel" />
           <ScrambleText
             text="GET IN TOUCH"
             as="h2"

@@ -1,8 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail, FileDown } from "lucide-react";
 import AsciiField from "./AsciiField";
 import ScrambleText from "./ScrambleText";
+import Magnetic from "./Magnetic";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
 
 const ROLES = [
@@ -63,10 +69,20 @@ const SOCIALS = [
 
 export default function Hero() {
   const role = useTypewriter(ROLES);
+  const reduced = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  // content drifts up and fades as you scroll past the hero
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, 110]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.1]);
 
   return (
     <section
       id="top"
+      ref={sectionRef}
       className="relative min-h-screen flex flex-col overflow-hidden"
     >
       {/* interactive ascii background */}
@@ -82,6 +98,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            style={reduced ? undefined : { y: contentY, opacity: contentOpacity }}
             className="pointer-events-auto max-w-3xl"
           >
             {/* prompt line */}
@@ -119,23 +136,27 @@ export default function Hero() {
 
             {/* CTAs */}
             <div className="mt-9 flex flex-wrap items-center gap-3 font-mono text-sm">
-              <a
-                href="#projects"
-                className="group bg-acc text-bg px-5 py-2.5 font-medium hover:bg-acc-dim transition-colors"
-              >
-                ./view_projects
-                <span className="inline-block ml-2 transition-transform group-hover:translate-y-0.5">
-                  ↓
-                </span>
-              </a>
-              <a
-                href={cvPdfUrl}
-                download="Daniel-Baravik-CV.pdf"
-                className="border border-line2 text-ink px-5 py-2.5 hover:border-acc hover:text-acc transition-colors inline-flex items-center gap-2"
-              >
-                <FileDown className="w-4 h-4" />
-                cv.pdf
-              </a>
+              <Magnetic>
+                <a
+                  href="#projects"
+                  className="group inline-block bg-acc text-bg px-5 py-2.5 font-medium hover:bg-acc-dim transition-colors"
+                >
+                  ./view_projects
+                  <span className="inline-block ml-2 transition-transform group-hover:translate-y-0.5">
+                    ↓
+                  </span>
+                </a>
+              </Magnetic>
+              <Magnetic>
+                <a
+                  href={cvPdfUrl}
+                  download="Daniel-Baravik-CV.pdf"
+                  className="border border-line2 text-ink px-5 py-2.5 hover:border-acc hover:text-acc transition-colors inline-flex items-center gap-2"
+                >
+                  <FileDown className="w-4 h-4" />
+                  cv.pdf
+                </a>
+              </Magnetic>
               <div className="flex items-center gap-1 sm:ml-2">
                 {SOCIALS.map((s) => (
                   <a
