@@ -160,12 +160,12 @@ export default function TerminalSection() {
               tracker (python/ts/rust + docker)
             </div>
             <div>
-              <span className="text-acc">music-genre-classification</span> — ML
-              audio experiments (python)
+              <span className="text-acc">winwin-shop</span> — client e-commerce
+              build (private repo — ask me about it)
             </div>
             <div>
-              <span className="text-acc">portfolio</span> — this exact site
-              (react/ts/tailwind)
+              <span className="text-acc">music-genre-classification</span> — ML
+              audio experiments (python)
             </div>
             <div className="mt-1">
               full list:{" "}
