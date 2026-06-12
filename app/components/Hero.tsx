@@ -1,229 +1,172 @@
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowDown, Github, Linkedin, Mail, FileDown } from "lucide-react";
+import AsciiField from "./AsciiField";
+import ScrambleText from "./ScrambleText";
+import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Github, Linkedin, Mail, Download, MapPin } from 'lucide-react';
-import AnimatedText from './AnimatedText';
-import cvPdfUrl from '../../Daniel Baravik - junior developer..pdf';
+const ROLES = [
+  "full-stack developer",
+  "python · typescript · rust",
+  "builds things end-to-end",
+  "open to junior roles",
+];
+
+function useTypewriter(words: string[]) {
+  const [text, setText] = useState("");
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setText(words[0]);
+      return;
+    }
+    let word = 0;
+    let char = 0;
+    let deleting = false;
+    let t = 0;
+    const step = () => {
+      const current = words[word];
+      if (!deleting) {
+        char++;
+        setText(current.slice(0, char));
+        if (char === current.length) {
+          deleting = true;
+          t = window.setTimeout(step, 1700);
+          return;
+        }
+        t = window.setTimeout(step, 55 + Math.random() * 50);
+      } else {
+        char--;
+        setText(current.slice(0, char));
+        if (char === 0) {
+          deleting = false;
+          word = (word + 1) % words.length;
+        }
+        t = window.setTimeout(step, 28);
+      }
+    };
+    t = window.setTimeout(step, 600);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return text;
+}
+
+const SOCIALS = [
+  { icon: Github, url: "https://github.com/danielml1003", label: "GitHub" },
+  {
+    icon: Linkedin,
+    url: "https://www.linkedin.com/in/daniel-baravik-429b38207/",
+    label: "LinkedIn",
+  },
+  { icon: Mail, url: "mailto:danielbaravik1003@gmail.com", label: "Email" },
+];
 
 export default function Hero() {
-  const scrollToAbout: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
-    // Ensure smooth scroll even if a global handler isn't attached
-    const href = e.currentTarget.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      e.preventDefault();
-      const el = document.querySelector(href);
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-  const socialLinks = [
-    {
-      icon: Github,
-      url: 'https://github.com/danielml1003',
-      label: 'GitHub'
-    },
-    {
-      icon: Linkedin,
-      url: 'https://www.linkedin.com/in/daniel-baravik-429b38207/',
-      label: 'LinkedIn'
-    },
-    {
-      icon: Mail,
-      url: 'mailto:daniel.baravik@example.com',
-      label: 'Email'
-    }
-  ];
+  const role = useTypewriter(ROLES);
 
   return (
-  <section className="min-h-screen snap-start bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white relative overflow-hidden">
-      {/* Enhanced animated background elements */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            rotate: [360, 180, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
+    <section
+      id="top"
+      className="relative min-h-screen flex flex-col overflow-hidden"
+    >
+      {/* interactive ascii background */}
+      <div className="absolute inset-0">
+        <AsciiField className="absolute inset-0 w-full h-full" />
+        {/* readability vignette */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(11,14,17,0.55)_70%,rgba(11,14,17,0.92)_100%)] pointer-events-none" />
       </div>
 
-      <div className="relative z-10 container mx-auto px-6 py-20 flex items-center min-h-screen">
-        <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
-          {/* Content */}
+      <div className="relative z-10 flex-1 flex items-center pointer-events-none">
+        <div className="mx-auto max-w-6xl px-5 sm:px-8 w-full pt-24 pb-20">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="pointer-events-auto max-w-3xl"
           >
-            <div className="space-y-4">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-center space-x-2 text-blue-300"
-              >
-                <MapPin className="w-4 h-4" />
-                <span className="text-sm font-medium">Available for opportunities</span>
-              </motion.div>
-              
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                <AnimatedText text="Daniel" delay={0.3} />
-                <br />
-                <AnimatedText text="Baravik" className="text-blue-400" delay={0.5} />
-              </h1>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ delay: 0.8 }}
-                className="text-xl lg:text-2xl text-gray-300 font-light"
-              >
-                Full Stack Developer & Software Engineer
-              </motion.p>
-              
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ delay: 1.0 }}
-                className="text-gray-400 max-w-xl leading-relaxed"
-              >
-                Passionate about creating innovative solutions and building scalable applications. 
-                Currently seeking opportunities to contribute to exciting projects and grow with a dynamic team.
-              </motion.p>
-            </div>
+            {/* prompt line */}
+            <p className="font-mono text-[13px] sm:text-sm text-dim mb-5">
+              <span className="text-acc">$</span> whoami
+              <span className="ml-3 inline-flex items-center gap-2 text-mint">
+                <span className="pulse-dot inline-block w-1.5 h-1.5 rounded-full bg-mint" />
+                open_to_work
+              </span>
+            </p>
 
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ delay: 1.2 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
-                <a href="#contact">
-                  <Mail className="w-5 h-5 mr-2" />
-                  Get In Touch
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white px-8 py-3 text-lg">
-                <a href={cvPdfUrl} download="Daniel-Baravik-CV.pdf">
-                  <Download className="w-5 h-5 mr-2" />
-                  Download CV
-                </a>
-              </Button>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
-              transition={{ delay: 1.4 }}
-              className="flex space-x-6"
-            >
-              {socialLinks.map((link, index) => (
-                <motion.a
-                  key={link.label}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ delay: 1.6 + (index * 0.1) }}
-                >
-                  <link.icon className="w-6 h-6" />
-                </motion.a>
-              ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Profile Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
-          >
-            <div className="relative">
-              <motion.div 
-                className="w-80 h-80 lg:w-96 lg:h-96 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-2"
-                whileInView={{ 
-                  scale: [1, 1.02, 1]
-                }}
-                viewport={{ once: false }}
-                transition={{ 
-                  scale: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                }}
-              >
-                <div className="w-full h-full rounded-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                  <motion.div 
-                    className="w-72 h-72 lg:w-80 lg:h-80 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-6xl font-bold text-white"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    DB
-                  </motion.div>
-                </div>
-              </motion.div>
-              {/* Subtle glow effect */}
-              <motion.div 
-                className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/10 to-purple-600/10 blur-2xl"
-                animate={{
-                  opacity: [0.2, 0.4, 0.2],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
+            {/* name */}
+            <h1 className="font-display font-bold leading-[0.95] tracking-tight text-[clamp(3rem,11vw,7.5rem)] select-none">
+              <ScrambleText text="DANIEL" as="span" className="block text-ink" />
+              <ScrambleText
+                text="BARAVIK"
+                as="span"
+                delay={250}
+                className="block text-acc"
               />
+            </h1>
+
+            {/* typed role */}
+            <p className="mt-6 font-mono text-base sm:text-xl text-dim h-7">
+              <span className="text-faint">&gt;</span>{" "}
+              <span className="text-ink">{role}</span>
+              <span className="caret" />
+            </p>
+
+            <p className="mt-6 max-w-xl font-mono text-[13px] sm:text-sm leading-relaxed text-dim">
+              I design and ship complete things — from the database schema to
+              the last pixel. Currently hunting for a team where I can build,
+              break, learn and repeat.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-9 flex flex-wrap items-center gap-3 font-mono text-sm">
+              <a
+                href="#projects"
+                className="group bg-acc text-bg px-5 py-2.5 font-medium hover:bg-acc-dim transition-colors"
+              >
+                ./view_projects
+                <span className="inline-block ml-2 transition-transform group-hover:translate-y-0.5">
+                  ↓
+                </span>
+              </a>
+              <a
+                href={cvPdfUrl}
+                download="Daniel-Baravik-CV.pdf"
+                className="border border-line2 text-ink px-5 py-2.5 hover:border-acc hover:text-acc transition-colors inline-flex items-center gap-2"
+              >
+                <FileDown className="w-4 h-4" />
+                cv.pdf
+              </a>
+              <div className="flex items-center gap-1 sm:ml-2">
+                {SOCIALS.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    className="p-2.5 text-dim hover:text-acc transition-colors"
+                  >
+                    <s.icon className="w-[18px] h-[18px]" />
+                  </a>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
+      {/* scroll hint */}
+      <motion.a
+        href="#about"
+        aria-label="Scroll to about section"
+        className="relative z-10 mx-auto mb-6 flex flex-col items-center gap-1 text-faint hover:text-acc transition-colors font-mono text-[11px]"
         initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: false }}
-        transition={{ delay: 1.8 }}
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.4 }}
       >
-  <a href="#about" onClick={scrollToAbout} aria-label="Scroll to About section" className="block">
-          <div className="w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center cursor-pointer hover:border-blue-300 transition-colors">
-            <div className="w-1 h-3 bg-blue-400 rounded-full mt-2 animate-bounce"></div>
-          </div>
-        </a>
-      </motion.div>
+        scroll
+        <ArrowDown className="w-4 h-4 animate-bounce" />
+      </motion.a>
     </section>
   );
 }

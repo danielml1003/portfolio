@@ -1,160 +1,174 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Github, ExternalLink, Star, GitFork } from 'lucide-react';
-import Project from '@/data/projects.json';
+import React from "react";
+import { motion } from "framer-motion";
+import { FolderGit2, ExternalLink, ArrowUpRight } from "lucide-react";
+import ScrambleText from "./ScrambleText";
+import data from "@/data/projects.json";
+
+interface Language {
+  name: string;
+  pct: number;
+  color: string;
+}
 
 interface ProjectType {
   id: string;
   name: string;
+  tagline?: string;
   description: string;
   github_url?: string;
   demo_url?: string | null;
-  image_url?: string;
   technologies: string[];
+  languages?: Language[];
+  year?: string;
+  status?: string;
   featured: boolean;
 }
 
-export default function Projects() {
-  const resolveAssetUrl = (path?: string) => {
-    if (!path) return undefined;
-    if (/^https?:\/\//i.test(path)) return path;
-    // Ensure assets work under GitHub Pages base path
-    const base = (import.meta as any).env?.BASE_URL || import.meta.env.BASE_URL;
-    return `${base}${path.replace(/^\//, '')}`;
-  };
-  const [projects, setProjects] = useState<ProjectType[]>([]);
-  const [loading, setLoading] = useState(true);
+const projects = (data as { projects: ProjectType[] }).projects;
 
-  useEffect(() => {
-    // Projects are loaded directly from the JSON file
-    setProjects(Project.projects);
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="text-center">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-48 mx-auto mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-96 mx-auto"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
+function RepoCard({ project, index }: { project: ProjectType; index: number }) {
   return (
-  <section id="projects" className="min-h-screen snap-start py-20 bg-white">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
-            Featured Projects
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            A showcase of my recent work and contributions to various projects
-          </p>
-        </motion.div>
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.08,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="group relative flex flex-col border border-line bg-panel hover:border-acc/50 hover:-translate-y-1 transition-all duration-300 font-mono"
+    >
+      {/* header */}
+      <div className="flex items-center gap-2.5 px-5 pt-5">
+        <FolderGit2 className="w-4 h-4 text-acc shrink-0" />
+        <h3 className="text-ink font-semibold text-[15px] truncate">
+          {project.name}
+        </h3>
+        <span className="ml-auto shrink-0 text-[10px] uppercase tracking-wider border border-line2 text-dim px-1.5 py-0.5">
+          public
+        </span>
+      </div>
 
-        {projects.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Github className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-4">No Projects Yet</h3>
-            <p className="text-gray-600 mb-8">Projects will be displayed here once they're added to the portfolio.</p>
-            <Button 
-              className="bg-blue-600 hover:bg-blue-700"
-              onClick={() => window.open('https://github.com/danielml1003', '_blank')}
-            >
-              <Github className="w-5 h-5 mr-2" />
-              View GitHub Profile
-            </Button>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
-                  {project.image_url && (
-                    <div className="aspect-video bg-gradient-to-br from-blue-50 to-indigo-50 rounded-t-lg overflow-hidden">
-                      <img 
-                        src={resolveAssetUrl(project.image_url)} 
-                        alt={project.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          // Hide broken image and keep the gradient placeholder
-                          (e.currentTarget as HTMLImageElement).style.display = 'none';
-                        }}
-                      />
-                    </div>
-                  )}
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-xl font-bold text-slate-900">
-                      {project.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      {project.description}
-                    </p>
-                    
-                    {project.technologies && (
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.technologies.map((tech, techIndex) => (
-                          <Badge key={techIndex} variant="secondary" className="text-xs">
-                            {tech}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <div className="flex gap-2 mt-auto">
-                      {project.github_url && (
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="flex-1"
-                          onClick={() => window.open(project.github_url, '_blank')}
-                        >
-                          <Github className="w-4 h-4 mr-2" />
-                          Code
-                        </Button>
-                      )}
-            {project.demo_url && typeof project.demo_url === 'string' && (
-                        <Button 
-                          size="sm"
-                          className="flex-1 bg-blue-600 hover:bg-blue-700"
-              onClick={() => project.demo_url && window.open(project.demo_url as string, '_blank')}
-                        >
-                          <ExternalLink className="w-4 h-4 mr-2" />
-                          Demo
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+      {project.tagline && (
+        <p className="px-5 pt-1 text-[12px] text-faint">— {project.tagline}</p>
+      )}
+
+      <p className="px-5 pt-3 text-[13px] leading-6 text-dim flex-1">
+        {project.description}
+      </p>
+
+      {/* topics */}
+      <div className="px-5 pt-4 flex flex-wrap gap-1.5">
+        {project.technologies.map((tech) => (
+          <span
+            key={tech}
+            className="text-[11px] text-cyan/90 bg-cyan/5 border border-cyan/15 px-2 py-0.5"
+          >
+            {tech.toLowerCase()}
+          </span>
+        ))}
+      </div>
+
+      {/* language bar */}
+      {project.languages && (
+        <div className="px-5 pt-4">
+          <div className="flex h-1.5 overflow-hidden bg-raise">
+            {project.languages.map((lang) => (
+              <span
+                key={lang.name}
+                style={{ width: `${lang.pct}%`, background: lang.color }}
+                title={`${lang.name} ${lang.pct}%`}
+              />
             ))}
           </div>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 pt-2.5">
+            {project.languages.map((lang) => (
+              <span
+                key={lang.name}
+                className="flex items-center gap-1.5 text-[11px] text-dim"
+              >
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ background: lang.color }}
+                />
+                {lang.name}{" "}
+                <span className="text-faint">{lang.pct}%</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* footer */}
+      <div className="mt-5 flex items-center border-t border-line text-[12px]">
+        {project.github_url && (
+          <a
+            href={project.github_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-5 py-3 text-dim hover:text-acc hover:bg-raise transition-colors"
+          >
+            git clone <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
         )}
+        {project.demo_url && (
+          <a
+            href={project.demo_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-5 py-3 text-dim hover:text-acc hover:bg-raise transition-colors border-l border-line"
+          >
+            live demo <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        )}
+        <span className="ml-auto pr-5 flex items-center gap-2 text-faint">
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              project.status === "active" ? "bg-mint" : "bg-amber"
+            }`}
+          />
+          {project.status} · {project.year}
+        </span>
+      </div>
+    </motion.article>
+  );
+}
+
+export default function Projects() {
+  return (
+    <section id="projects" className="relative py-24 sm:py-32 bg-bg2 border-y border-line">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="mb-12 font-mono">
+          <p className="text-[13px] text-dim mb-2">
+            <span className="text-acc">$</span> git log --oneline --featured
+          </p>
+          <ScrambleText
+            text="SELECTED WORK"
+            as="h2"
+            className="font-display font-bold text-4xl sm:text-6xl tracking-tight text-ink"
+          />
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {projects.map((project, i) => (
+            <RepoCard key={project.id} project={project} index={i} />
+          ))}
+        </div>
+
+        <motion.a
+          href="https://github.com/danielml1003"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+          className="mt-8 flex items-center justify-center gap-2 border border-dashed border-line2 py-4 font-mono text-[13px] text-dim hover:text-acc hover:border-acc/50 transition-colors"
+        >
+          $ git remote show origin — everything else lives on GitHub
+          <ArrowUpRight className="w-4 h-4" />
+        </motion.a>
       </div>
     </section>
   );

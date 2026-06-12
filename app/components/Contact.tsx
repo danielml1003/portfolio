@@ -1,303 +1,240 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Mail, Phone, MapPin, Github, Linkedin, Send, CheckCircle } from 'lucide-react';
-import SendEmail from '@/integrations/Core/SendEmail';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Send } from "lucide-react";
+import Window from "./Window";
+import ScrambleText from "./ScrambleText";
+import SendEmail from "@/integrations/Core/SendEmail";
+
+const inputCls =
+  "w-full bg-raise/60 border border-line px-4 py-3 font-mono text-[13px] text-ink placeholder:text-faint/60 focus:border-acc/60 outline-none transition-colors";
 
 export default function Contact() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [sent, setSent] = useState(false);
 
-  // Trigger a celebratory animation when the form is submitted successfully
-  useEffect(() => {
-    if (!submitted) return;
-
-    (async () => {
-      const mod = await import('animejs');
-      const animeFn: any = (mod as any).default ?? (mod as any);
-
-      // Pop-in the check circle
-      animeFn({
-        targets: '#success-check',
-        scale: [0, 1],
-        rotate: [0, 10],
-        easing: 'easeOutElastic(1, .6)',
-        duration: 900
-      });
-
-      // Fire confetti dots outward from center
-      animeFn({
-        targets: '.confetti-dot',
-        translateX: () => (Math.random() - 0.5) * 440,
-        translateY: () => (Math.random() - 0.5) * 280,
-        scale: [{ value: [0, 1], duration: 200 }, { value: 0, delay: 400, duration: 600 }],
-        opacity: [{ value: 1, duration: 200 }, { value: 0, delay: 300, duration: 700 }],
-        easing: 'easeOutCubic',
-        delay: (_el: Element, i: number) => i * 25,
-        duration: 900
-      });
-    })();
-  }, [submitted]);
-
-  const contactInfo = [
-    {
-      icon: Mail,
-      title: 'Email',
-      value: 'danielbaravik1003@gmail.com',
-      href: 'mailto:danielbaravik1003@gmail.com'
-    },
-    {
-      icon: Github,
-      title: 'GitHub',
-      value: 'danielml1003',
-      href: 'https://github.com/danielml1003'
-    },
-    {
-      icon: Linkedin,
-      title: 'LinkedIn',
-      value: 'Daniel Baravik',
-      href: 'https://www.linkedin.com/in/daniel-baravik-429b38207/'
-    },
-    {
-      icon: Phone,
-      title: 'Phone',
-      value: '+972 54-637-7655',
-      href: 'tel:+972546377655'
-    }
-  ];
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       await SendEmail({
-        to: 'danielbaravik1003@gmail.com',
-        subject: `Portfolio Contact: Message from ${formData.name}`,
-        body: `
-New message from your portfolio website:
-
-Name: ${formData.name}
-Email: ${formData.email}
-
-Message:
-${formData.message}
-
----
-This message was sent from your portfolio contact form.
-        `
+        to: "danielbaravik1003@gmail.com",
+        subject: `Portfolio contact: message from ${formData.name}`,
+        body: `New message from the portfolio:\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n`,
       });
-
-      setSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
-    } catch (error) {
-      console.error('Error sending email:', error);
-      alert('There was an error sending your message. Please try again or contact me directly.');
+      setSent(true);
+    } catch {
+      alert(
+        "Couldn't open your mail client — email me directly at danielbaravik1003@gmail.com"
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  if (submitted) {
-    return (
-  <section id="contact" className="min-h-screen snap-start py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="relative text-center max-w-2xl mx-auto"
-          >
-            {/* Confetti canvas */}
-            <div className="pointer-events-none absolute inset-0 overflow-visible">
-              {Array.from({ length: 40 }).map((_, i) => (
-                <span
-                  key={i}
-                  className="confetti-dot absolute left-1/2 top-1/2 block"
-                  style={{
-                    width: Math.random() > 0.5 ? 10 : 6,
-                    height: Math.random() > 0.5 ? 10 : 6,
-                    borderRadius: '9999px',
-                    background: ['#60A5FA', '#A78BFA', '#34D399', '#F59E0B', '#F472B6'][i % 5],
-                    transform: 'translate(-50%, -50%)'
-                  }}
-                />
-              ))}
-            </div>
-
-            <div id="success-check" className="w-24 h-24 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30">
-              <CheckCircle className="w-12 h-12 text-white" />
-            </div>
-            <h2 className="text-3xl font-bold mb-4">Message Sent Successfully!</h2>
-            <p className="text-gray-300 mb-8">
-              Thank you for reaching out! I'll get back to you as soon as possible.
-            </p>
-            <Button 
-              onClick={() => setSubmitted(false)}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              Send Another Message
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-    );
-  }
-
   return (
-  <section id="contact" className="min-h-screen snap-start py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white">
-      <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: false, amount: 0.3 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-            Let's Work Together
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            I'm always open to discussing new opportunities, interesting projects, or just having a chat about technology.
+    <section id="contact" className="relative py-24 sm:py-32 bg-bg2 border-t border-line">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <div className="mb-12 font-mono">
+          <p className="text-[13px] text-dim mb-2">
+            <span className="text-acc">$</span> ./send_message --to daniel
           </p>
-        </motion.div>
+          <ScrambleText
+            text="GET IN TOUCH"
+            as="h2"
+            className="font-display font-bold text-4xl sm:text-6xl tracking-tight text-ink"
+          />
+          <p className="mt-4 text-[13px] text-dim max-w-xl leading-6">
+            Hiring? Building something? Just want to argue about tabs vs
+            spaces? My inbox compiles all of it.
+          </p>
+        </div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Info */}
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8 items-start">
+          {/* form */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: false, amount: 0.3 }}
-            className="space-y-8"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="text-left">
-              <h3 className="text-2xl font-bold mb-6">Get in Touch</h3>
-              <p className="text-gray-300 mb-8 leading-relaxed">
-                Whether you have a project in mind, want to discuss opportunities, 
-                or just want to connect, I'd love to hear from you.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {contactInfo.map((info, index) => (
-                <motion.div
-                  key={info.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: false, amount: 0.3 }}
-                  className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/10 transition-colors duration-300 text-left w-full"
-                >
-                  <div className="flex items-center justify-start gap-4">
-                    <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                      <info.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="font-semibold text-white">{info.title}</h4>
-                      {info.href ? (
-                        <a 
-                          href={info.href} 
-                          className="text-blue-300 hover:text-blue-200 transition-colors duration-200 break-all"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-gray-300 break-all">{info.value}</p>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20 text-white">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold">Send a Message</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+            <Window title="~/contact — ./send_message">
+              {sent ? (
+                <div className="font-mono text-[13px] leading-7 py-6">
+                  <p className="text-mint">✓ message handed off to your mail client</p>
+                  <p className="text-dim mt-2">
+                    If nothing opened, reach me directly:{" "}
+                    <a
+                      href="mailto:danielbaravik1003@gmail.com"
+                      className="text-acc link-sweep"
+                    >
+                      danielbaravik1003@gmail.com
+                    </a>
+                  </p>
+                  <button
+                    onClick={() => {
+                      setSent(false);
+                      setFormData({ name: "", email: "", message: "" });
+                    }}
+                    className="mt-6 border border-line2 px-4 py-2 text-dim hover:text-acc hover:border-acc/50 transition-colors"
+                  >
+                    $ ./send_message --again
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5 font-mono">
                   <div>
-                    <Input
+                    <label htmlFor="c-name" className="block text-[12px] text-faint mb-1.5">
+                      <span className="text-vio">--name</span> string, required
+                    </label>
+                    <input
+                      id="c-name"
                       name="name"
-                      placeholder="Your Name"
+                      placeholder="Ada Lovelace"
                       value={formData.name}
                       onChange={handleChange}
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-400"
+                      className={inputCls}
                       required
                       disabled={isSubmitting}
                     />
                   </div>
                   <div>
-                    <Input
+                    <label htmlFor="c-email" className="block text-[12px] text-faint mb-1.5">
+                      <span className="text-vio">--reply-to</span> email, required
+                    </label>
+                    <input
+                      id="c-email"
                       name="email"
                       type="email"
-                      placeholder="Your Email"
+                      placeholder="you@company.dev"
                       value={formData.email}
                       onChange={handleChange}
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-400"
+                      className={inputCls}
                       required
                       disabled={isSubmitting}
                     />
                   </div>
                   <div>
-                    <Textarea
+                    <label htmlFor="c-msg" className="block text-[12px] text-faint mb-1.5">
+                      <span className="text-vio">--message</span> text, required
+                    </label>
+                    <textarea
+                      id="c-msg"
                       name="message"
-                      placeholder="Your Message"
+                      rows={5}
+                      placeholder="We're building X and need someone who…"
                       value={formData.message}
                       onChange={handleChange}
-                      rows={5}
-                      className="bg-white/5 border-white/20 text-white placeholder:text-gray-400"
+                      className={`${inputCls} resize-y`}
                       required
                       disabled={isSubmitting}
                     />
                   </div>
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg"
+                  <button
+                    type="submit"
                     disabled={isSubmitting}
+                    className="w-full sm:w-auto bg-acc text-bg px-6 py-3 text-[13px] font-medium hover:bg-acc-dim transition-colors disabled:opacity-60 inline-flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                        Sending...
+                        <span className="w-4 h-4 border-2 border-bg/30 border-t-bg rounded-full animate-spin" />
+                        executing…
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5 mr-2" />
-                        Send Message
+                        <Send className="w-4 h-4" />
+                        [ execute ↵ ]
                       </>
                     )}
-                  </Button>
+                  </button>
                 </form>
-              </CardContent>
-            </Card>
+              )}
+            </Window>
+          </motion.div>
+
+          {/* socials.json */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="font-mono text-[13px]"
+          >
+            <Window title="~/contact/socials.json" contentClassName="p-5">
+              <pre className="leading-7 whitespace-pre-wrap break-words">
+                <span className="text-faint">{"{"}</span>
+                {"\n  "}
+                <span className="text-vio">"email"</span>
+                <span className="text-faint">: </span>
+                <a
+                  href="mailto:danielbaravik1003@gmail.com"
+                  className="text-amber link-sweep break-all"
+                >
+                  "danielbaravik1003@gmail.com"
+                </a>
+                <span className="text-faint">,</span>
+                {"\n  "}
+                <span className="text-vio">"github"</span>
+                <span className="text-faint">: </span>
+                <a
+                  href="https://github.com/danielml1003"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber link-sweep"
+                >
+                  "danielml1003"
+                </a>
+                <span className="text-faint">,</span>
+                {"\n  "}
+                <span className="text-vio">"linkedin"</span>
+                <span className="text-faint">: </span>
+                <a
+                  href="https://www.linkedin.com/in/daniel-baravik-429b38207/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber link-sweep"
+                >
+                  "daniel-baravik"
+                </a>
+                <span className="text-faint">,</span>
+                {"\n  "}
+                <span className="text-vio">"phone"</span>
+                <span className="text-faint">: </span>
+                <a href="tel:+972546377655" className="text-amber link-sweep">
+                  "+972 54-637-7655"
+                </a>
+                <span className="text-faint">,</span>
+                {"\n  "}
+                <span className="text-vio">"response_time"</span>
+                <span className="text-faint">: </span>
+                <span className="text-amber">"&lt; 24h"</span>
+                {"\n"}
+                <span className="text-faint">{"}"}</span>
+              </pre>
+            </Window>
+            <p className="mt-4 text-faint leading-6">
+              prefer the keyboard? the terminal up there also answers{" "}
+              <span className="text-acc">socials</span> and{" "}
+              <span className="text-acc">sudo hire-me</span>.
+            </p>
           </motion.div>
         </div>
+
+        {/* footer */}
+        <footer className="mt-24 pt-8 border-t border-line font-mono text-[12px] text-faint flex flex-col sm:flex-row gap-3 items-center justify-between pb-10">
+          <p>
+            © {new Date().getFullYear()} Daniel Baravik — designed & built by
+            hand, no template
+          </p>
+          <p>
+            <span className="text-acc">$</span> echo "thanks for scrolling this
+            far"
+          </p>
+        </footer>
       </div>
     </section>
   );

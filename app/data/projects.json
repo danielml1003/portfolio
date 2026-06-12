@@ -3,31 +3,50 @@
     {
       "id": "1",
       "name": "shop-saver",
-  "description": "Full-stack app with separate backend, frontend, and service modules. Built with Python, TypeScript, and Rust and orchestrated with Docker (docker-compose, init.sql).",
+      "tagline": "full-stack price tracker",
+      "description": "Full-stack app with separate backend, frontend and service modules. Python + TypeScript + Rust, orchestrated with Docker Compose and an init.sql bootstrap.",
       "github_url": "https://github.com/danielml1003/shop-saver",
       "demo_url": null,
-  "image_url": "/projects/shop-saver.svg",
-      "technologies": ["Python", "TypeScript", "Rust"],
+      "technologies": ["Python", "TypeScript", "Rust", "Docker"],
+      "languages": [
+        { "name": "Python", "pct": 48, "color": "#3572A5" },
+        { "name": "TypeScript", "pct": 32, "color": "#3178C6" },
+        { "name": "Rust", "pct": 20, "color": "#DEA584" }
+      ],
+      "year": "2025",
+      "status": "active",
       "featured": true
     },
     {
       "id": "2",
       "name": "music-genre-classification",
-  "description": "Python-based experiments for music genre classification with simple client/server scripts and a small QML UI prototype.",
+      "tagline": "ML audio experiments",
+      "description": "Python experiments for classifying music by genre — client/server scripts for inference plus a small QML UI prototype on top.",
       "github_url": "https://github.com/danielml1003/music-genre-classification",
       "demo_url": null,
-  "image_url": "/projects/music-genre-classification.svg",
-      "technologies": ["Python", "QML"],
+      "technologies": ["Python", "QML", "Machine Learning"],
+      "languages": [
+        { "name": "Python", "pct": 86, "color": "#3572A5" },
+        { "name": "QML", "pct": 14, "color": "#44A51C" }
+      ],
+      "year": "2024",
+      "status": "shipped",
       "featured": true
     },
     {
       "id": "3",
-      "name": "Portfolio Website",
-  "description": "Personal portfolio built with React Router, Vite, TypeScript, and Tailwind CSS; deployed to GitHub Pages.",
+      "name": "portfolio",
+      "tagline": "the site you're reading",
+      "description": "This workstation. React Router 7 + Vite + Tailwind 4, a hand-rolled ASCII field renderer, a working in-page terminal, and zero UI templates.",
       "github_url": "https://github.com/danielml1003/portfolio",
       "demo_url": "https://danielml1003.github.io/portfolio",
-  "image_url": "/projects/portfolio.svg",
       "technologies": ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+      "languages": [
+        { "name": "TypeScript", "pct": 91, "color": "#3178C6" },
+        { "name": "CSS", "pct": 9, "color": "#663399" }
+      ],
+      "year": "2026",
+      "status": "active",
       "featured": true
     }
   ]
