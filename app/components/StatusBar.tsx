@@ -6,6 +6,7 @@ import { GitBranch, ArrowUp } from "lucide-react";
  */
 export default function StatusBar() {
   const [time, setTime] = useState<string>("--:--:--");
+  const [uptime, setUptime] = useState<string>("0:00");
   const [scrollPos, setScrollPos] = useState<string>("TOP");
 
   useEffect(() => {
@@ -15,7 +16,17 @@ export default function StatusBar() {
       second: "2-digit",
       timeZone: "Asia/Jerusalem",
     });
-    const tick = () => setTime(fmt.format(new Date()));
+    const start = Date.now();
+    const tick = () => {
+      setTime(fmt.format(new Date()));
+      const s = Math.floor((Date.now() - start) / 1000);
+      const m = Math.floor(s / 60);
+      setUptime(
+        m >= 60
+          ? `${Math.floor(m / 60)}h${String(m % 60).padStart(2, "0")}m`
+          : `${m}:${String(s % 60).padStart(2, "0")}`
+      );
+    };
     tick();
     const id = window.setInterval(tick, 1000);
     return () => window.clearInterval(id);
@@ -46,7 +57,7 @@ export default function StatusBar() {
             open_to_work
           </span>
           <span className="hidden md:inline text-faint">
-            utf-8 · react 19 · 0 errors
+            utf-8 · react 19 · 0 errors · up {uptime}
           </span>
         </div>
         <div className="flex items-center gap-4">
