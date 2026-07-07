@@ -10,7 +10,11 @@ import {
   Mail,
   Copy,
   TerminalSquare,
+  Palette,
+  Sparkles,
 } from "lucide-react";
+import { ACCENTS, applyAccent } from "@/lib/accent";
+import { MATRIX_EVENT } from "./MatrixRain";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
 
 interface Action {
@@ -98,6 +102,26 @@ export default function CommandPalette({
             await navigator.clipboard.writeText("danielbaravik1003@gmail.com");
           } catch {}
           onClose();
+        },
+      },
+      ...Object.keys(ACCENTS).map((name) => ({
+        id: `theme-${name}`,
+        label: `theme: ${name}`,
+        hint: "accent",
+        icon: Palette,
+        run: () => {
+          applyAccent(name);
+          onClose();
+        },
+      })),
+      {
+        id: "matrix",
+        label: "enter the matrix",
+        hint: "???",
+        icon: Sparkles,
+        run: () => {
+          onClose();
+          window.dispatchEvent(new CustomEvent(MATRIX_EVENT));
         },
       },
     ];
@@ -211,10 +235,11 @@ export default function CommandPalette({
                 </li>
               ))}
             </ul>
-            <div className="border-t border-line px-4 py-2 flex gap-4 text-[10px] text-faint">
+            <div className="border-t border-line px-4 py-2 flex flex-wrap gap-x-4 gap-y-1 text-[10px] text-faint">
               <span>↑↓ navigate</span>
               <span>↵ run</span>
               <span>esc close</span>
+              <span className="hidden sm:inline">page: j/k sections · gg top · G bottom</span>
             </div>
           </motion.div>
         </motion.div>

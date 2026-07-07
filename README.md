@@ -12,9 +12,14 @@ around a developer's working environment:
 - **neofetch skills panel** — system-specs layout with honest proficiency bars
 - **Repo-card projects** — GitHub-style language bars and statuses
 - **A real working terminal** — type `help`, `neofetch`, `cat about.md`,
-  `sudo hire-me`… with command history (↑/↓) and a few easter eggs
+  `git log`, `sudo hire-me`… with command history (↑/↓) and easter eggs
+  (`snake` is fully playable; `vim` traps you until `:q`; `matrix` rains)
+- **Accent theme engine** — `theme cyan|amber|violet|rose|lime` recolors the
+  entire site live (persisted across visits)
+- **Vim-style navigation** — `j`/`k` between sections, `gg` top, `G` bottom,
+  `?` opens the palette
 - **Ctrl/Cmd+K command palette** — keyboard-first navigation
-- **Editor status bar** — live Israel time, branch, open-to-work indicator
+- **Editor status bar** — live Israel time, uptime, scroll position, branch
 
 Built with React Router 7 (SPA mode), Vite, TypeScript, Tailwind CSS v4 and
 Framer Motion. Respects `prefers-reduced-motion`; the canvas pauses offscreen.

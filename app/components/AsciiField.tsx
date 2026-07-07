@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { ACCENT_EVENT, currentAccent } from "@/lib/accent";
 
 /**
  * AsciiField — an animated field of ASCII characters driven by value noise.
@@ -9,7 +10,6 @@ import React, { useEffect, useRef } from "react";
 const RAMP = " ·:;+=xX#%@".split("");
 const CELL = 16; // px between characters
 const DIM_COLOR = "rgba(141, 154, 168, 1)";
-const ACC_COLOR = "rgba(200, 255, 61, 1)";
 
 // -- tiny value-noise implementation (no deps) ------------------------------
 function hash3(x: number, y: number, z: number): number {
@@ -56,6 +56,13 @@ export default function AsciiField({ className }: { className?: string }) {
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // follow the active accent theme
+    let accColor = currentAccent();
+    const onAccent = () => {
+      accColor = currentAccent();
+    };
+    window.addEventListener(ACCENT_EVENT, onAccent);
 
     let raf = 0;
     let running = true;
@@ -156,7 +163,7 @@ export default function AsciiField({ className }: { className?: string }) {
         ctx.globalAlpha = a * 0.62;
         ctx.fillText(ch, x, y);
       }
-      ctx.fillStyle = ACC_COLOR;
+      ctx.fillStyle = accColor;
       for (const [ch, x, y, a] of accCells) {
         ctx.globalAlpha = a;
         ctx.fillText(ch, x, y);
@@ -194,6 +201,7 @@ export default function AsciiField({ className }: { className?: string }) {
       return () => {
         cancelAnimationFrame(raf);
         window.removeEventListener("resize", resize);
+        window.removeEventListener(ACCENT_EVENT, onAccent);
         canvas.parentElement?.removeEventListener("pointermove", onMove);
         canvas.parentElement?.removeEventListener("pointerleave", onLeave);
         document.removeEventListener("visibilitychange", onVis);
@@ -203,6 +211,7 @@ export default function AsciiField({ className }: { className?: string }) {
 
     return () => {
       window.removeEventListener("resize", resize);
+      window.removeEventListener(ACCENT_EVENT, onAccent);
     };
   }, []);
 

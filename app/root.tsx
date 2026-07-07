@@ -42,6 +42,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
       }
     } catch {}
   })();`;
+  // Re-apply a persisted accent theme before first paint (no lime flash)
+  const accentScript = `(() => {
+    try {
+      var a = localStorage.getItem('ws-accent');
+      var m = { lime:['#c8ff3d','#9fd417'], cyan:['#6be4ff','#3fc4e8'], amber:['#ffb454','#e89a33'], violet:['#b689ff','#9a66f0'], rose:['#ff6b81','#e84f66'] }[a];
+      if (m) {
+        document.documentElement.style.setProperty('--color-acc', m[0]);
+        document.documentElement.style.setProperty('--color-acc-dim', m[1]);
+      }
+    } catch (e) {}
+  })();`;
   return (
     <html lang="en" className="dark">
       <head>
@@ -49,6 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#0b0e11" />
         <script dangerouslySetInnerHTML={{ __html: cacheBusterScript }} />
+        <script dangerouslySetInnerHTML={{ __html: accentScript }} />
         <Meta />
         <Links />
       </head>

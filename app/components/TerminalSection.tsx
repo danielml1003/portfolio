@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
+import Snake from "./Snake";
+import { MATRIX_EVENT } from "./MatrixRain";
+import { ACCENTS, applyAccent } from "@/lib/accent";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
 
 type Entry = { id: number; node: React.ReactNode };
@@ -42,16 +45,63 @@ const HELP: Array<[string, string]> = [
   ["socials", "where to find me"],
   ["cv", "download my CV"],
   ["open github|linkedin", "jump to a profile"],
+  ["theme <color>", "lime · cyan · amber · violet · rose"],
+  ["snake", "🐍 — yes, really"],
+  ["cowsay <msg>", "wisdom, bovine edition"],
   ["date", "current time"],
   ["clear", "wipe the screen"],
   ["sudo hire-me", "the shortcut"],
 ];
+
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h < 5) return "up late? respect.";
+  if (h < 12) return "good morning.";
+  if (h < 18) return "good afternoon.";
+  if (h < 23) return "good evening.";
+  return "night owl mode detected.";
+}
+
+function cowsay(msg: string): string {
+  const words = (msg || "moo. hire daniel.").split(/\s+/);
+  const lines: string[] = [];
+  let line = "";
+  for (const w of words) {
+    if ((line + " " + w).trim().length > 34) {
+      lines.push(line.trim());
+      line = w;
+    } else {
+      line = (line + " " + w).trim();
+    }
+  }
+  if (line) lines.push(line);
+  const width = Math.max(...lines.map((l) => l.length));
+  const top = " " + "_".repeat(width + 2);
+  const bottom = " " + "-".repeat(width + 2);
+  const body = lines
+    .map((l, i) => {
+      const pad = l.padEnd(width, " ");
+      if (lines.length === 1) return `< ${pad} >`;
+      if (i === 0) return `/ ${pad} \\`;
+      if (i === lines.length - 1) return `\\ ${pad} /`;
+      return `| ${pad} |`;
+    })
+    .join("\n");
+  const cow = String.raw`        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||`;
+  return `${top}\n${body}\n${bottom}\n${cow}`;
+}
 
 export default function TerminalSection() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [histIdx, setHistIdx] = useState(-1);
+  const [mode, setMode] = useState<"shell" | "vim">("shell");
+  const [gameActive, setGameActive] = useState(false);
   const idRef = useRef(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -62,7 +112,7 @@ export default function TerminalSection() {
   useEffect(() => {
     push(
       <Out>
-        <span className="text-acc">daniel.sh</span> v2.0 — interactive mode.
+        <span className="text-acc">daniel.sh</span> v2.1 — {greeting()}
         {"\n"}type <span className="text-acc">help</span> to see what I respond
         to, or just poke around.
       </Out>
@@ -77,6 +127,34 @@ export default function TerminalSection() {
 
   const run = (raw: string) => {
     const cmd = raw.trim();
+
+    // trapped in vim — the only way out is the ancient ritual
+    if (mode === "vim") {
+      push(
+        <div className="break-words">
+          <span className="text-mint">-- INSERT --</span>{" "}
+          <span className="text-ink">{cmd}</span>
+        </div>
+      );
+      if (/^:(q!?|wq|x)$/.test(cmd)) {
+        setMode("shell");
+        push(
+          <Out>
+            <span className="text-mint">✓ escaped vim.</span> wrote nothing,
+            lost nothing. you may brag about this.
+          </Out>
+        );
+      } else {
+        push(
+          <Out>
+            <span className="text-rose">E492: Not an editor command:</span>{" "}
+            {cmd || "(nothing)"} — the exit is <span className="text-acc">:q</span>
+          </Out>
+        );
+      }
+      return;
+    }
+
     push(
       <div className="break-words">
         {PROMPT} <span className="text-ink">{cmd}</span>
@@ -307,6 +385,91 @@ export default function TerminalSection() {
         }
         break;
 
+      case "theme": {
+        if (!arg) {
+          push(
+            <Out>
+              usage: theme &lt;color&gt; — available:{" "}
+              {Object.keys(ACCENTS).map((name, i) => (
+                <span key={name}>
+                  {i > 0 && " · "}
+                  <span style={{ color: ACCENTS[name].acc }}>{name}</span>
+                </span>
+              ))}
+            </Out>
+          );
+        } else if (applyAccent(arg)) {
+          push(
+            <Out>
+              <span className="text-acc">✓ theme set to {arg}</span> — the whole
+              workstation just recompiled its colors.
+            </Out>
+          );
+        } else {
+          push(
+            <Out>
+              unknown theme: {arg} — try{" "}
+              {Object.keys(ACCENTS).join(" · ")}
+            </Out>
+          );
+        }
+        break;
+      }
+
+      case "snake": {
+        if (window.matchMedia("(pointer: coarse)").matches) {
+          push(
+            <Out>
+              🐍 snake needs arrow keys — come back on a keyboard. (or enjoy
+              everything else here)
+            </Out>
+          );
+          break;
+        }
+        setGameActive(true);
+        push(
+          <Snake
+            onExit={(score, hi) => {
+              setGameActive(false);
+              push(
+                <Out>
+                  snake exited — score{" "}
+                  <span className="text-acc">{score}</span>, best{" "}
+                  <span className="text-acc">{hi}</span>.{" "}
+                  {score >= 10
+                    ? "ok that's genuinely good."
+                    : "the food was ◆ by the way."}
+                </Out>
+              );
+              window.setTimeout(() => inputRef.current?.focus(), 50);
+            }}
+          />
+        );
+        break;
+      }
+
+      case "cowsay":
+        push(<Out>{cowsay(raw.trim().slice(7))}</Out>);
+        break;
+
+      case "matrix":
+        window.dispatchEvent(new CustomEvent(MATRIX_EVENT));
+        push(<Out>wake up, neo… (click or esc to exit)</Out>);
+        break;
+
+      case "vim":
+      case "vi":
+      case "nano":
+        setMode("vim");
+        push(
+          <Out>
+            <span className="text-faint">
+              {"~\n~\n~    VIM - Vi IMproved (portfolio edition)\n~\n~    you are now inside vim.\n~    good luck getting out.\n~"}
+            </span>
+          </Out>
+        );
+        break;
+
       case "rm":
         push(
           <Out>
@@ -382,7 +545,9 @@ export default function TerminalSection() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            onClick={() => inputRef.current?.focus()}
+            onClick={() => {
+              if (!gameActive) inputRef.current?.focus();
+            }}
             className="cursor-text"
           >
             <Window
@@ -400,19 +565,32 @@ export default function TerminalSection() {
                   <div key={entry.id}>{entry.node}</div>
                 ))}
                 <div className="flex items-center gap-2">
-                  <span className="shrink-0">{PROMPT}</span>
+                  <span className="shrink-0">
+                    {mode === "vim" ? (
+                      <span className="text-mint">-- INSERT --</span>
+                    ) : (
+                      PROMPT
+                    )}
+                  </span>
                   <input
                     ref={inputRef}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={onKeyDown}
-                    className="flex-1 bg-transparent outline-none text-ink caret-[#c8ff3d] placeholder:text-faint/60 min-w-0"
-                    placeholder="type 'help'…"
+                    className="flex-1 bg-transparent outline-none text-ink caret-acc placeholder:text-faint/60 min-w-0"
+                    placeholder={
+                      gameActive
+                        ? "snake has the keyboard — q to quit"
+                        : mode === "vim"
+                          ? "how do I exit this thing?"
+                          : "type 'help'…"
+                    }
                     aria-label="Terminal input"
                     autoComplete="off"
                     autoCapitalize="off"
                     autoCorrect="off"
                     spellCheck={false}
+                    disabled={gameActive}
                   />
                 </div>
               </div>
