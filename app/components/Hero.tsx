@@ -110,15 +110,33 @@ export default function Hero() {
               </span>
             </p>
 
-            {/* name */}
-            <h1 className="font-display font-bold leading-[0.95] tracking-tight text-[clamp(3rem,11vw,7.5rem)] select-none">
-              <ScrambleText text="DANIEL" as="span" className="block text-ink" />
-              <ScrambleText
-                text="BARAVIK"
-                as="span"
-                delay={250}
-                className="block text-acc"
-              />
+            {/* name — each line wipes up out of a clip */}
+            <h1 className="font-display font-bold leading-[0.92] tracking-tight text-[clamp(3.2rem,12.5vw,9.5rem)] select-none">
+              <span className="block overflow-hidden pb-[0.06em]">
+                <motion.span
+                  className="block"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ScrambleText text="DANIEL" as="span" className="block text-ink" />
+                </motion.span>
+              </span>
+              <span className="block overflow-hidden pb-[0.08em]">
+                <motion.span
+                  className="block"
+                  initial={{ y: "110%" }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <ScrambleText
+                    text="BARAVIK"
+                    as="span"
+                    delay={250}
+                    className="block text-acc"
+                  />
+                </motion.span>
+              </span>
             </h1>
 
             {/* typed role */}
@@ -139,7 +157,8 @@ export default function Hero() {
               <Magnetic>
                 <a
                   href="#projects"
-                  className="group inline-block bg-acc text-bg px-5 py-2.5 font-medium hover:bg-acc-dim transition-colors"
+                  data-cursor="view"
+                  className="brackets group inline-block bg-acc text-bg px-5 py-2.5 font-medium hover:bg-acc-dim transition-colors"
                 >
                   ./view_projects
                   <span className="inline-block ml-2 transition-transform group-hover:translate-y-0.5">
@@ -151,7 +170,8 @@ export default function Hero() {
                 <a
                   href={cvPdfUrl}
                   download="Daniel-Baravik-CV.pdf"
-                  className="border border-line2 text-ink px-5 py-2.5 hover:border-acc hover:text-acc transition-colors inline-flex items-center gap-2"
+                  data-cursor="save"
+                  className="brackets border border-line2 text-ink px-5 py-2.5 hover:border-acc hover:text-acc transition-colors inline-flex items-center gap-2"
                 >
                   <FileDown className="w-4 h-4" />
                   cv.pdf
@@ -175,6 +195,21 @@ export default function Hero() {
           </motion.div>
         </div>
       </div>
+
+      {/* HUD — decorative telemetry on the right edge */}
+      <motion.div
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden xl:flex flex-col items-end gap-3 font-mono text-[10px] tracking-[0.25em] text-faint select-none pointer-events-none"
+        initial={{ opacity: 0, x: 12 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.1, duration: 0.8 }}
+        aria-hidden="true"
+      >
+        <span>32.0853°N</span>
+        <span>34.7818°E</span>
+        <span className="w-px h-16 bg-line2 self-end mr-8" />
+        <span className="text-acc/70">SYS::ONLINE</span>
+        <span>PORTFOLIO v3</span>
+      </motion.div>
 
       {/* scroll hint */}
       <motion.a

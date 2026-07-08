@@ -4,6 +4,7 @@ import Window from "./Window";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
 import Snake from "./Snake";
+import GhostIndex from "./GhostIndex";
 import { MATRIX_EVENT } from "./MatrixRain";
 import { ACCENTS, applyAccent } from "@/lib/accent";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
@@ -523,8 +524,9 @@ export default function TerminalSection() {
   };
 
   return (
-    <section id="terminal" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-4xl px-5 sm:px-8">
+    <section id="terminal" className="relative py-24 sm:py-32 overflow-hidden">
+      <GhostIndex n="04" />
+      <div className="relative mx-auto max-w-4xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
           <TypeOnView text="ssh guest@daniel — no password needed" />
           <ScrambleText
@@ -549,6 +551,7 @@ export default function TerminalSection() {
               if (!gameActive) inputRef.current?.focus();
             }}
             className="cursor-text"
+            data-cursor="type"
           >
             <Window
               title="guest@daniel: ~ (ssh)"

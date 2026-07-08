@@ -12,6 +12,8 @@ import Contact from "../components/Contact";
 import StatusBar from "../components/StatusBar";
 import CommandPalette from "../components/CommandPalette";
 import MatrixRain from "../components/MatrixRain";
+import Cursor from "../components/Cursor";
+import BigMarquee from "../components/BigMarquee";
 
 export function meta(_args: Route.MetaArgs) {
   return [
@@ -124,12 +126,14 @@ export default function Portfolio() {
         <Skills />
         <Projects />
         <TerminalSection />
+        <BigMarquee />
         <Contact />
       </main>
 
       <StatusBar />
       <CommandPalette open={paletteOpen} onClose={closePalette} />
       <MatrixRain />
+      <Cursor />
     </div>
   );
 }

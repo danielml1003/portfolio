@@ -1,7 +1,14 @@
-import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useRef } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
+import GhostIndex from "./GhostIndex";
 
 /* ----------------------------- timeline data ----------------------------- */
 
@@ -186,6 +193,86 @@ const STATEMENT: Array<{ word: string; acc?: boolean }> = [
   { word: "blindly." },
 ];
 
+/* -------- scrollytelling statement: words ignite as you scroll ----------- */
+
+function Word({
+  progress,
+  range,
+  acc,
+  children,
+}: {
+  progress: MotionValue<number>;
+  range: [number, number];
+  acc?: boolean;
+  children: string;
+}) {
+  const opacity = useTransform(progress, range, [0, 1]);
+  const cls = acc ? "text-acc" : "text-ink";
+  return (
+    <span className="relative inline-block mr-[0.32em]">
+      {/* dim base layer so the sentence is always readable */}
+      <span className={`${cls} opacity-[0.14]`}>{children}</span>
+      <motion.span
+        style={{ opacity }}
+        className={`absolute inset-0 ${cls} ${acc ? "drop-shadow-[0_0_18px_rgba(200,255,61,0.35)]" : ""}`}
+        aria-hidden="true"
+      >
+        {children}
+      </motion.span>
+    </span>
+  );
+}
+
+function PinnedStatement() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.7", "end 0.9"],
+  });
+
+  if (reduced) {
+    return (
+      <p className="font-display text-2xl sm:text-4xl leading-snug max-w-3xl mb-16 sm:mb-20">
+        {STATEMENT.map((w, i) => (
+          <span
+            key={i}
+            className={`inline-block mr-[0.3em] ${w.acc ? "text-acc" : "text-ink"}`}
+          >
+            {w.word}
+          </span>
+        ))}
+      </p>
+    );
+  }
+
+  const n = STATEMENT.length;
+  return (
+    <div ref={ref} className="relative min-h-[150vh] mb-10 sm:mb-16">
+      <div className="sticky top-[24vh]">
+        <p className="font-display font-medium text-3xl sm:text-5xl lg:text-6xl leading-[1.15] max-w-4xl">
+          {STATEMENT.map((w, i) => {
+            const start = (i / n) * 0.82;
+            return (
+              <Word
+                key={i}
+                progress={scrollYProgress}
+                range={[start, start + 0.14]}
+                acc={w.acc}
+              >
+                {w.word}
+              </Word>
+            );
+          })}
+        </p>
+        <p className="mt-8 font-mono text-[11px] text-faint tracking-[0.25em]">
+          ── KEEP SCROLLING ──
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------- components ------------------------------ */
 
 function CommitBody({ commit }: { commit: Commit }) {
@@ -226,8 +313,10 @@ export default function About() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="about" className="relative py-24 sm:py-32 blueprint overflow-hidden">
+    // no overflow-hidden on this section — it would break the sticky statement pin
+    <section id="about" className="relative py-24 sm:py-32 blueprint">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,transparent_30%,var(--color-bg)_85%)] pointer-events-none" />
+      <GhostIndex n="01" />
       <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-10 font-mono">
           <TypeOnView text="cat about.md && git log --graph --all" />
@@ -238,37 +327,8 @@ export default function About() {
           />
         </div>
 
-        {/* statement — staggered word reveal */}
-        <motion.p
-          className="font-display text-2xl sm:text-4xl leading-snug max-w-3xl mb-16 sm:mb-20"
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.5 }}
-          variants={{
-            hidden: {},
-            show: { transition: { staggerChildren: reduced ? 0 : 0.045 } },
-          }}
-        >
-          {STATEMENT.map((w, i) => (
-            <motion.span
-              key={i}
-              className={`inline-block mr-[0.3em] ${
-                w.acc ? "text-acc" : "text-ink"
-              }`}
-              variants={{
-                hidden: { opacity: 0, y: 18, filter: "blur(4px)" },
-                show: {
-                  opacity: 1,
-                  y: 0,
-                  filter: "blur(0px)",
-                  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
-                },
-              }}
-            >
-              {w.word}
-            </motion.span>
-          ))}
-        </motion.p>
+        {/* statement — pinned, ignites word by word as you scroll */}
+        <PinnedStatement />
 
         <div className="grid lg:grid-cols-[1fr_320px] gap-12 lg:gap-8 items-start">
           {/* git graph timeline — main trunk + side branches (work, army) */}
