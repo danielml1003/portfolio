@@ -4,6 +4,7 @@ import { Send } from "lucide-react";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
+import GhostIndex from "./GhostIndex";
 import SendEmail from "@/integrations/Core/SendEmail";
 
 const inputCls =
@@ -38,8 +39,9 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 sm:py-32 bg-bg2 border-t border-line">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+    <section id="contact" className="relative py-24 sm:py-32 bg-bg2 border-t border-line overflow-hidden">
+      <GhostIndex n="05" />
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
           <TypeOnView text="./send_message --to daniel" />
           <ScrambleText
@@ -136,7 +138,8 @@ export default function Contact() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full sm:w-auto bg-acc text-bg px-6 py-3 text-[13px] font-medium hover:bg-acc-dim transition-colors disabled:opacity-60 inline-flex items-center justify-center gap-2"
+                    data-cursor="send"
+                    className="brackets w-full sm:w-auto bg-acc text-bg px-6 py-3 text-[13px] font-medium hover:bg-acc-dim transition-colors disabled:opacity-60 inline-flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>

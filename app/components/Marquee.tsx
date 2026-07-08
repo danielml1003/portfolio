@@ -1,4 +1,5 @@
 import React from "react";
+import VelocityMarquee from "./VelocityMarquee";
 
 const ITEMS = [
   "REACT",
@@ -15,24 +16,25 @@ const ITEMS = [
   "MONGODB",
 ];
 
+/** Tech ticker — drifts on its own, accelerates with scroll velocity. */
 export default function Marquee() {
-  const row = [...ITEMS, ...ITEMS];
   return (
-    <div
+    <VelocityMarquee
+      baseVelocity={-35}
+      skew={false}
       className="relative border-y border-line bg-bg2 overflow-hidden select-none"
-      aria-hidden="true"
     >
-      <div className="ticker flex w-max items-center gap-0 py-3">
-        {row.map((item, i) => (
+      <span className="flex items-center py-3">
+        {ITEMS.map((item) => (
           <span
-            key={i}
+            key={item}
             className="flex items-center font-mono text-[12px] tracking-[0.2em] text-faint"
           >
             <span className="px-6 hover:text-acc transition-colors">{item}</span>
             <span className="text-acc/50">✦</span>
           </span>
         ))}
-      </div>
-    </div>
+      </span>
+    </VelocityMarquee>
   );
 }

@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
+import GhostIndex from "./GhostIndex";
 
 const ASCII_DB = String.raw`
 ██████╗ ██████╗
@@ -70,8 +71,9 @@ export default function Skills() {
   const reduced = useReducedMotion();
 
   return (
-    <section id="skills" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+    <section id="skills" className="relative py-24 sm:py-32 overflow-hidden">
+      <GhostIndex n="02" />
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="mb-12 font-mono">
           <TypeOnView text="neofetch --stack" />
           <ScrambleText

@@ -4,12 +4,15 @@ import { ACCENT_EVENT, currentAccent } from "@/lib/accent";
 /**
  * AsciiField — an animated field of ASCII characters driven by value noise.
  * The cursor injects "energy" into the field; nearby cells glow in the accent
- * color and climb the character ramp. Renders to a single canvas.
+ * color and climb the character ramp. On wide screens the field also forms a
+ * giant breathing "DB" monogram that dissolves back into noise as you scroll.
+ * Renders to a single canvas.
  */
 
 const RAMP = " ·:;+=xX#%@".split("");
 const CELL = 16; // px between characters
 const DIM_COLOR = "rgba(141, 154, 168, 1)";
+const MONOGRAM = "DB";
 
 // -- tiny value-noise implementation (no deps) ------------------------------
 function hash3(x: number, y: number, z: number): number {
@@ -75,6 +78,31 @@ export default function AsciiField({ className }: { className?: string }) {
     // mouse state, smoothed so the glow trails the cursor
     const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999, energy: 0 };
 
+    // monogram mask: mask[row*cols+col] ∈ [0,1] — where the "DB" lives
+    let mask: Float32Array | null = null;
+
+    const buildMask = () => {
+      mask = null;
+      if (w < 1024) return; // the name already fills small screens
+      const off = document.createElement("canvas");
+      off.width = cols;
+      off.height = rows;
+      const octx = off.getContext("2d");
+      if (!octx) return;
+      // draw the monogram into grid space, anchored to the right half
+      const size = Math.min(rows * 0.88, cols * 0.38);
+      octx.fillStyle = "#fff";
+      octx.font = `900 ${size}px "Space Grotesk", "JetBrains Mono", sans-serif`;
+      octx.textAlign = "center";
+      octx.textBaseline = "middle";
+      octx.fillText(MONOGRAM, cols * 0.7, rows * 0.5);
+      const data = octx.getImageData(0, 0, cols, rows).data;
+      mask = new Float32Array(cols * rows);
+      for (let i = 0; i < cols * rows; i++) {
+        mask[i] = data[i * 4 + 3] / 255;
+      }
+    };
+
     const resize = () => {
       const rect = canvas.parentElement?.getBoundingClientRect();
       if (!rect) return;
@@ -91,7 +119,13 @@ export default function AsciiField({ className }: { className?: string }) {
       ctx.textAlign = "center";
       cols = Math.ceil(w / CELL) + 1;
       rows = Math.ceil(h / CELL) + 1;
+      buildMask();
     };
+
+    // rebuild once the display font is actually loaded (crisper monogram)
+    if (typeof document !== "undefined" && "fonts" in document) {
+      document.fonts.ready.then(() => buildMask()).catch(() => {});
+    }
 
     const onMove = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
@@ -119,6 +153,11 @@ export default function AsciiField({ className }: { className?: string }) {
       const time = t * 0.00012;
       const glowR = Math.min(w, h) * 0.28;
 
+      // the monogram breathes, and dissolves into noise as the hero scrolls away
+      const scrollFade = Math.max(0, 1 - (window.scrollY / (h * 0.55)) ** 1.4);
+      const breathe = 0.82 + 0.18 * Math.sin(t * 0.0014);
+      const maskStrength = mask ? scrollFade * breathe : 0;
+
       const dimCells: Array<[string, number, number, number]> = [];
       const accCells: Array<[string, number, number, number]> = [];
 
@@ -141,7 +180,19 @@ export default function AsciiField({ className }: { className?: string }) {
             boost = Math.exp(-d2 / (glowR * glowR)) * mouse.energy;
           }
 
-          const total = v * 0.72 + boost * 0.85;
+          // monogram contribution — noise-jittered so the letters feel alive
+          let ink = 0;
+          if (maskStrength > 0.01) {
+            const m = mask![gy * cols + gx];
+            if (m > 0.08) {
+              ink =
+                m *
+                maskStrength *
+                (0.55 + 0.45 * valueNoise(gx * 0.11, gy * 0.13, time * 2.4 + 200));
+            }
+          }
+
+          const total = v * 0.72 + boost * 0.85 + ink * 0.8;
           if (total < 0.3) continue; // empty cell — skip the draw call
 
           const idx = Math.min(
@@ -152,7 +203,7 @@ export default function AsciiField({ className }: { className?: string }) {
 
           const alpha = Math.min(0.08 + (total - 0.3) * 0.95, 0.95);
           const cell: [string, number, number, number] = [RAMP[idx], px, py, alpha];
-          if (boost > 0.16) accCells.push(cell);
+          if (boost > 0.16 || ink > 0.24) accCells.push(cell);
           else dimCells.push(cell);
         }
       }

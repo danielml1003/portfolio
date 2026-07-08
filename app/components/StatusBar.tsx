@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GitBranch, ArrowUp } from "lucide-react";
+import { ACCENTS, applyAccent } from "@/lib/accent";
 
 /**
  * StatusBar — fixed editor-style bottom bar with live local (Israel) time.
@@ -61,6 +62,19 @@ export default function StatusBar() {
           </span>
         </div>
         <div className="flex items-center gap-4">
+          {/* one-click accent themes */}
+          <span className="hidden lg:flex items-center gap-1.5" role="group" aria-label="Accent theme">
+            {Object.entries(ACCENTS).map(([name, c]) => (
+              <button
+                key={name}
+                onClick={() => applyAccent(name)}
+                aria-label={`Theme ${name}`}
+                title={`theme ${name}`}
+                className="w-2.5 h-2.5 rounded-full border border-bg hover:scale-125 transition-transform"
+                style={{ background: c.acc }}
+              />
+            ))}
+          </span>
           <span className="hidden sm:inline text-faint">israel</span>
           <span className="tabular-nums">{time} IDT</span>
           <span className="tabular-nums text-faint w-9 text-right">

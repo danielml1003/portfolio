@@ -44,7 +44,9 @@ html,
 body {
   background: var(--color-bg);
   color: var(--color-ink);
-  overflow-x: hidden;
+  /* `clip` (not `hidden`) — hidden turns body into a scroll container,
+     which silently kills every position:sticky on the page */
+  overflow-x: clip;
   max-width: 100vw;
 }
 
@@ -205,6 +207,44 @@ body {
 .text-outline {
   -webkit-text-stroke: 1px var(--color-line2);
   color: transparent;
+}
+
+/* corner brackets that snap outward on hover — for CTAs */
+.brackets {
+  position: relative;
+}
+.brackets::before,
+.brackets::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 0 solid var(--color-acc);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.brackets::before {
+  top: -3px;
+  left: -3px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+.brackets::after {
+  bottom: -3px;
+  right: -3px;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+.brackets:hover::before {
+  opacity: 1;
+  top: -7px;
+  left: -7px;
+}
+.brackets:hover::after {
+  opacity: 1;
+  bottom: -7px;
+  right: -7px;
 }
 
 /* light sweep across cards on hover */
