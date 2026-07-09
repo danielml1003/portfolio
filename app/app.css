@@ -209,6 +209,15 @@ body {
   color: transparent;
 }
 
+/* slow idle levitation for floating windows */
+@keyframes levitate {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.levitate {
+  animation: levitate 7s ease-in-out infinite;
+}
+
 /* corner brackets that snap outward on hover — for CTAs */
 .brackets {
   position: relative;

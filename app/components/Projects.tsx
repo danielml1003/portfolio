@@ -10,6 +10,7 @@ import type { MotionValue } from "framer-motion";
 import { FolderGit2, ExternalLink, ArrowUpRight, Lock } from "lucide-react";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
+import TiltCard from "./TiltCard";
 import data from "@/data/projects.json";
 
 interface Language {
@@ -353,20 +354,22 @@ function StackedCard({
       className={`sticky ${index > 0 ? "mt-10" : ""}`}
       style={{ top: `calc(96px + ${index * 28}px)` }}
     >
-      <motion.article
-        initial={reduced ? undefined : { opacity: 0, y: 36 }}
-        whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        style={
-          reduced || isLast
-            ? undefined
-            : { scale, filter, transformOrigin: "top center" }
-        }
-        className="group sheen relative flex min-h-[68vh] flex-col border border-line bg-panel font-mono transition-colors duration-300 hover:border-acc/50"
-      >
-        <CardInner project={project} index={index} />
-      </motion.article>
+      <TiltCard max={3}>
+        <motion.article
+          initial={reduced ? undefined : { opacity: 0, y: 36 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={
+            reduced || isLast
+              ? undefined
+              : { scale, filter, transformOrigin: "top center" }
+          }
+          className="group sheen relative flex min-h-[68vh] flex-col border border-line bg-panel font-mono transition-colors duration-300 hover:border-acc/50"
+        >
+          <CardInner project={project} index={index} />
+        </motion.article>
+      </TiltCard>
     </div>
   );
 }
