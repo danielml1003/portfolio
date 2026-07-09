@@ -73,6 +73,20 @@ export default function BootSequence({ onDone }: { onDone?: () => void }) {
         >
           <div className="scanlines absolute inset-0" />
           <div className="w-full max-w-xl px-6 font-mono text-[13px] leading-7">
+            <div className="flex items-center justify-between text-[11px] text-faint mb-4">
+              <span>BARAVIK-OS</span>
+              <span className="text-acc tabular-nums">
+                LOADING {Math.min(100, Math.round((lineCount / BOOT_LINES.length) * 100))}%
+              </span>
+            </div>
+            <div className="h-px bg-line mb-6 overflow-hidden">
+              <div
+                className="h-full bg-acc transition-all duration-200 ease-out"
+                style={{
+                  width: `${Math.min(100, (lineCount / BOOT_LINES.length) * 100)}%`,
+                }}
+              />
+            </div>
             {BOOT_LINES.slice(0, lineCount).map((line, i) => (
               <div key={i} className={i === 0 ? "text-acc" : "text-dim"}>
                 {line.startsWith("[ ok ]") ? (

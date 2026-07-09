@@ -14,6 +14,8 @@ import CommandPalette from "../components/CommandPalette";
 import MatrixRain from "../components/MatrixRain";
 import Cursor from "../components/Cursor";
 import BigMarquee from "../components/BigMarquee";
+import SmoothScroll from "../components/SmoothScroll";
+import CursorGlow from "../components/CursorGlow";
 
 export function meta(_args: Route.MetaArgs) {
   return [
@@ -134,6 +136,8 @@ export default function Portfolio() {
       <CommandPalette open={paletteOpen} onClose={closePalette} />
       <MatrixRain />
       <Cursor />
+      <CursorGlow />
+      <SmoothScroll />
     </div>
   );
 }

@@ -555,7 +555,7 @@ export default function TerminalSection() {
           >
             <Window
               title="guest@daniel: ~ (ssh)"
-              className="scanlines"
+              className="scanlines levitate"
               contentClassName="p-0"
             >
               <div

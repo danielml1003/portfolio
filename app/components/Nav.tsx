@@ -10,6 +10,24 @@ const LINKS = [
   { href: "#contact", label: "./contact", index: "05" },
 ];
 
+/** Per-character hover wave — letters lift in sequence. */
+function WaveText({ text }: { text: string }) {
+  return (
+    <span aria-label={text}>
+      {text.split("").map((c, i) => (
+        <span
+          key={i}
+          aria-hidden="true"
+          className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[3px]"
+          style={{ transitionDelay: `${i * 22}ms` }}
+        >
+          {c}
+        </span>
+      ))}
+    </span>
+  );
+}
+
 export default function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -63,7 +81,7 @@ export default function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
               <span className="text-[9px] text-faint align-super mr-0.5 group-hover:text-acc/70 transition-colors">
                 {l.index}
               </span>
-              <span className="link-sweep">{l.label}</span>
+              <WaveText text={l.label} />
             </a>
           ))}
         </div>

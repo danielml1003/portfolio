@@ -78,6 +78,9 @@ export default function Hero() {
   // content drifts up and fades as you scroll past the hero
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 110]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0.1]);
+  // the name tears itself apart on exit
+  const line1X = useTransform(scrollYProgress, [0, 1], ["0vw", "-16vw"]);
+  const line2X = useTransform(scrollYProgress, [0, 1], ["0vw", "16vw"]);
 
   return (
     <section
@@ -117,6 +120,7 @@ export default function Hero() {
                   className="block"
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
+                  style={reduced ? undefined : { x: line1X }}
                   transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <ScrambleText text="DANIEL" as="span" className="block text-ink" />
@@ -127,6 +131,7 @@ export default function Hero() {
                   className="block"
                   initial={{ y: "110%" }}
                   animate={{ y: 0 }}
+                  style={reduced ? undefined : { x: line2X }}
                   transition={{ duration: 0.9, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <ScrambleText
