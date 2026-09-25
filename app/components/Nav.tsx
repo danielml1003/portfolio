@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
-import { Command } from "lucide-react";
+import { Command, Menu } from "lucide-react";
+import MobileMenu from "./MobileMenu";
 
 const LINKS = [
   { href: "#about", label: "./about", index: "01" },
@@ -13,23 +14,32 @@ const LINKS = [
 /** Per-character hover wave — letters lift in sequence. */
 function WaveText({ text }: { text: string }) {
   return (
-    <span aria-label={text}>
-      {text.split("").map((c, i) => (
-        <span
-          key={i}
-          aria-hidden="true"
-          className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[3px]"
-          style={{ transitionDelay: `${i * 22}ms` }}
-        >
-          {c}
-        </span>
-      ))}
+    <span>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {text.split("").map((c, i) => (
+          <span
+            key={i}
+            className="inline-block transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[3px]"
+            style={{ transitionDelay: `${i * 22}ms` }}
+          >
+            {c}
+          </span>
+        ))}
+      </span>
     </span>
   );
 }
 
 export default function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    // hand focus back to the control that opened the menu
+    requestAnimationFrame(() => menuButton.current?.focus());
+  }, []);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
     stiffness: 150,
@@ -46,7 +56,7 @@ export default function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 print-hide ${
         scrolled
           ? "bg-bg/85 backdrop-blur-md border-b border-line"
           : "bg-transparent border-b border-transparent"
@@ -102,8 +112,19 @@ export default function Nav({ onOpenPalette }: { onOpenPalette: () => void }) {
           >
             [hire_me]
           </a>
+          <button
+            ref={menuButton}
+            onClick={() => setMenuOpen(true)}
+            className="md:hidden flex items-center justify-center border border-line bg-panel/70 w-9 h-9 text-dim hover:text-acc hover:border-line2 transition-colors"
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
         </div>
       </nav>
+      <MobileMenu open={menuOpen} onClose={closeMenu} />
     </header>
   );
 }

@@ -22,7 +22,7 @@ export default function Marquee() {
     <VelocityMarquee
       baseVelocity={-35}
       skew={false}
-      className="relative border-y border-line bg-bg2 overflow-hidden select-none"
+      className="relative border-y border-line bg-bg2 overflow-hidden select-none print-hide"
     >
       <span className="flex items-center py-3">
         {ITEMS.map((item) => (

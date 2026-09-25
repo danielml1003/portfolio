@@ -158,7 +158,7 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div className="mt-9 flex flex-wrap items-center gap-3 font-mono text-sm">
+            <div className="mt-9 flex flex-wrap items-center gap-3 font-mono text-sm print-hide">
               <Magnetic>
                 <a
                   href="#projects"
@@ -203,7 +203,7 @@ export default function Hero() {
 
       {/* HUD — decorative telemetry on the right edge */}
       <motion.div
-        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden xl:flex flex-col items-end gap-3 font-mono text-[10px] tracking-[0.25em] text-faint select-none pointer-events-none"
+        className="absolute right-6 top-1/2 -translate-y-1/2 z-10 hidden xl:flex flex-col items-end gap-3 font-mono text-[10px] tracking-[0.25em] text-faint select-none pointer-events-none print-hide"
         initial={{ opacity: 0, x: 12 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1.1, duration: 0.8 }}
@@ -220,7 +220,7 @@ export default function Hero() {
       <motion.a
         href="#about"
         aria-label="Scroll to about section"
-        className="relative z-10 mx-auto mb-6 flex flex-col items-center gap-1 text-faint hover:text-acc transition-colors font-mono text-[11px]"
+        className="relative z-10 mx-auto mb-6 flex flex-col items-center gap-1 text-faint hover:text-acc transition-colors font-mono text-[11px] print-hide"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4 }}

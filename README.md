@@ -18,11 +18,18 @@ around a developer's working environment:
   entire site live (persisted across visits)
 - **Vim-style navigation** — `j`/`k` between sections, `gg` top, `G` bottom,
   `?` opens the palette
-- **Ctrl/Cmd+K command palette** — keyboard-first navigation
+- **Ctrl/Cmd+K command palette** — keyboard-first navigation (lazy-loaded)
 - **Editor status bar** — live Israel time, uptime, scroll position, branch
+- **Mobile menu** — full-screen terminal-style navigation with focus management
+- **Prints as a resume** — `Ctrl+P` drops the chrome and animations and prints a
+  clean, light CV with link URLs
+- **Accessible** — WCAG AA contrast, landmarks, reduced-motion respected, zero
+  axe-core violations on desktop and mobile
+- **Structured data** — schema.org Person JSON-LD + canonical URL
 
 Built with React Router 7 (SPA mode), Vite, TypeScript, Tailwind CSS v4 and
-Framer Motion. Respects `prefers-reduced-motion`; the canvas pauses offscreen.
+Framer Motion. The ASCII canvas self-tunes its resolution on slow devices and
+pauses offscreen.
 
 ## Development
 

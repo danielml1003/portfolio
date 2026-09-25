@@ -13,6 +13,7 @@ import faviconSvg from "./favicon.svg";
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: faviconSvg, type: "image/svg+xml" },
+  { rel: "canonical", href: "https://danielml1003.github.io/portfolio/" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -53,6 +54,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
       }
     } catch (e) {}
   })();`;
+  // Structured data so search engines and link previews know who this is
+  const personLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Daniel Baravik",
+    url: "https://danielml1003.github.io/portfolio/",
+    jobTitle: "Full-Stack Developer",
+    email: "mailto:danielbaravik1003@gmail.com",
+    address: { "@type": "PostalAddress", addressCountry: "IL" },
+    sameAs: [
+      "https://github.com/danielml1003",
+      "https://www.linkedin.com/in/daniel-baravik-429b38207/",
+    ],
+    knowsAbout: ["TypeScript", "React", "Python", "Rust", "Node.js", "PostgreSQL", "Docker"],
+  });
   return (
     <html lang="en" className="dark">
       <head>
@@ -61,6 +77,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="theme-color" content="#0b0e11" />
         <script dangerouslySetInnerHTML={{ __html: cacheBusterScript }} />
         <script dangerouslySetInnerHTML={{ __html: accentScript }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: personLd }} />
         <Meta />
         <Links />
       </head>

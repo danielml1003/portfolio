@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import type { Route } from "./+types/Portfolio";
 import BootSequence from "../components/BootSequence";
 import Nav from "../components/Nav";
@@ -10,12 +10,14 @@ import Projects from "../components/Projects";
 import TerminalSection from "../components/TerminalSection";
 import Contact from "../components/Contact";
 import StatusBar from "../components/StatusBar";
-import CommandPalette from "../components/CommandPalette";
 import MatrixRain from "../components/MatrixRain";
 import Cursor from "../components/Cursor";
 import BigMarquee from "../components/BigMarquee";
 import SmoothScroll from "../components/SmoothScroll";
 import CursorGlow from "../components/CursorGlow";
+
+// only fetched the first time someone opens it
+const CommandPalette = lazy(() => import("../components/CommandPalette"));
 
 export function meta(_args: Route.MetaArgs) {
   return [
@@ -46,12 +48,18 @@ export function meta(_args: Route.MetaArgs) {
 
 export default function Portfolio() {
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [paletteMounted, setPaletteMounted] = useState(false);
   const closePalette = useCallback(() => setPaletteOpen(false), []);
+  const openPalette = useCallback(() => {
+    setPaletteMounted(true);
+    setPaletteOpen(true);
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
+        setPaletteMounted(true);
         setPaletteOpen((open) => !open);
       }
     };
@@ -102,6 +110,7 @@ export default function Portfolio() {
           behavior: "smooth",
         });
       } else if (e.key === "?") {
+        setPaletteMounted(true);
         setPaletteOpen(true);
       }
     };
@@ -119,7 +128,7 @@ export default function Portfolio() {
       </a>
 
       <BootSequence />
-      <Nav onOpenPalette={() => setPaletteOpen(true)} />
+      <Nav onOpenPalette={openPalette} />
 
       <main>
         <Hero />
@@ -133,7 +142,11 @@ export default function Portfolio() {
       </main>
 
       <StatusBar />
-      <CommandPalette open={paletteOpen} onClose={closePalette} />
+      {paletteMounted && (
+        <Suspense fallback={null}>
+          <CommandPalette open={paletteOpen} onClose={closePalette} />
+        </Suspense>
+      )}
       <MatrixRain />
       <Cursor />
       <CursorGlow />

@@ -1,13 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Window from "./Window";
 import ScrambleText from "./ScrambleText";
 import TypeOnView from "./TypeOnView";
-import Snake from "./Snake";
 import GhostIndex from "./GhostIndex";
 import { MATRIX_EVENT } from "./MatrixRain";
 import { ACCENTS, applyAccent } from "@/lib/accent";
 import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
+
+// the game only downloads when someone actually types `snake`
+const Snake = lazy(() => import("./Snake"));
 
 type Entry = { id: number; node: React.ReactNode };
 
@@ -49,6 +51,7 @@ const HELP: Array<[string, string]> = [
   ["theme <color>", "lime · cyan · amber · violet · rose"],
   ["snake", "🐍 — yes, really"],
   ["cowsay <msg>", "wisdom, bovine edition"],
+  ["changelog", "how this site evolved"],
   ["date", "current time"],
   ["clear", "wipe the screen"],
   ["sudo hire-me", "the shortcut"],
@@ -429,25 +432,52 @@ export default function TerminalSection() {
         }
         setGameActive(true);
         push(
-          <Snake
-            onExit={(score, hi) => {
-              setGameActive(false);
-              push(
-                <Out>
-                  snake exited — score{" "}
-                  <span className="text-acc">{score}</span>, best{" "}
-                  <span className="text-acc">{hi}</span>.{" "}
-                  {score >= 10
-                    ? "ok that's genuinely good."
-                    : "the food was ◆ by the way."}
-                </Out>
-              );
-              window.setTimeout(() => inputRef.current?.focus(), 50);
-            }}
-          />
+          <Suspense fallback={<Out>loading snake…</Out>}>
+            <Snake
+              onExit={(score, hi) => {
+                setGameActive(false);
+                push(
+                  <Out>
+                    snake exited — score{" "}
+                    <span className="text-acc">{score}</span>, best{" "}
+                    <span className="text-acc">{hi}</span>.{" "}
+                    {score >= 10
+                      ? "ok that's genuinely good."
+                      : "the food was ◆ by the way."}
+                  </Out>
+                );
+                window.setTimeout(() => inputRef.current?.focus(), 50);
+              }}
+            />
+          </Suspense>
         );
         break;
       }
+
+      case "changelog":
+      case "version":
+        push(
+          <Out>
+            <span className="text-faint">
+              tradition: every new AI model that shows up gets to ship a version.
+            </span>
+            {"\n"}
+            <span className="text-acc">v1.0</span> the gradient template era
+            (retired){"\n"}
+            <span className="text-acc">v2.0</span> the workstation — terminal
+            redesign, ascii field, real shell{"\n"}
+            <span className="text-acc">v2.1</span> terminal os — snake, themes,
+            vim keys, matrix{"\n"}
+            <span className="text-acc">v3.0</span> go wild — living monogram,
+            scrollytelling, sticky stacks{"\n"}
+            <span className="text-acc">v3.1</span> maximalist motion —
+            inertial scroll, glow, 3d tilt{"\n"}
+            <span className="text-acc">v3.2</span> craft pass — mobile menu,
+            AA contrast, print resume, structured data{"\n"}
+            <span className="text-faint">next: whoever comes after.</span>
+          </Out>
+        );
+        break;
 
       case "cowsay":
         push(<Out>{cowsay(raw.trim().slice(7))}</Out>);

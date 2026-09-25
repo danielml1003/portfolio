@@ -23,7 +23,7 @@
   /* type */
   --color-ink: #e8eef2;
   --color-dim: #8d9aa8;
-  --color-faint: #5b6671;
+  --color-faint: #7a8794; /* ≥4.5:1 on every surface — AA for small text */
 
   /* signature accent + syntax support colors */
   --color-acc: #c8ff3d;
@@ -287,7 +287,8 @@ body {
   .ticker,
   .pulse-dot::before,
   .caret::after,
-  .crt {
+  .crt,
+  .levitate {
     animation: none;
   }
   *,
@@ -295,5 +296,80 @@ body {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------------------------------ print
+   The site prints as a clean, light, one-or-two page resume: decoration,
+   fixed chrome, the terminal and the marquees are dropped; scroll-driven
+   layouts are flattened; link targets are printed after the link text. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    overflow: visible !important;
+    max-width: none !important;
+  }
+  * {
+    color: #111 !important;
+    background: transparent !important;
+    border-color: #c8ccd2 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  .grain::after,
+  .fixed,
+  canvas,
+  #terminal,
+  .print-hide {
+    display: none !important;
+  }
+  .text-acc,
+  .text-mint,
+  .text-cyan,
+  .text-amber,
+  .text-vio {
+    color: #2f5a00 !important;
+  }
+  .text-outline {
+    -webkit-text-stroke: 0 !important;
+    color: #d0d4da !important;
+  }
+  .sticky,
+  .absolute {
+    position: static !important;
+  }
+  #top {
+    min-height: 0 !important;
+    padding-top: 1.5rem !important;
+  }
+  [class*="min-h-"] {
+    min-height: 0 !important;
+  }
+  section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    break-inside: avoid;
+  }
+  article {
+    break-inside: avoid;
+    margin-bottom: 1rem !important;
+  }
+  #contact a[href^="http"]::after,
+  #projects a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+  }
+  input,
+  textarea,
+  button,
+  form {
+    display: none !important;
   }
 }

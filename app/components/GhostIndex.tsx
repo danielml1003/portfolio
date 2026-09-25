@@ -27,7 +27,7 @@ export default function GhostIndex({
       style={reduced ? undefined : { y }}
       aria-hidden="true"
       className={cn(
-        "pointer-events-none select-none absolute top-10 right-2 sm:right-6 font-display font-bold leading-none text-outline opacity-50 text-[7rem] lg:text-[11rem] z-0",
+        "pointer-events-none select-none absolute top-10 right-2 sm:right-6 font-display font-bold leading-none text-outline opacity-50 text-[7rem] lg:text-[11rem] z-0 print-hide",
         className
       )}
     >

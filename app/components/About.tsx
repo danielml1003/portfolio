@@ -214,7 +214,7 @@ function Word({
       <span className={`${cls} opacity-[0.14]`}>{children}</span>
       <motion.span
         style={{ opacity }}
-        className={`absolute inset-0 ${cls} ${acc ? "drop-shadow-[0_0_18px_rgba(200,255,61,0.35)]" : ""}`}
+        className={`absolute inset-0 print-hide ${cls} ${acc ? "drop-shadow-[0_0_18px_rgba(200,255,61,0.35)]" : ""}`}
         aria-hidden="true"
       >
         {children}
@@ -265,7 +265,7 @@ function PinnedStatement() {
             );
           })}
         </p>
-        <p className="mt-8 font-mono text-[11px] text-faint tracking-[0.25em]">
+        <p className="mt-8 font-mono text-[11px] text-faint tracking-[0.25em] print-hide">
           ── KEEP SCROLLING ──
         </p>
       </div>

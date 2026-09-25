@@ -46,7 +46,10 @@ export default function StatusBar() {
   }, []);
 
   return (
-    <div className="fixed bottom-0 inset-x-0 z-50 h-7 border-t border-line bg-bg2/95 backdrop-blur-md font-mono text-[11px] select-none">
+    <aside
+      aria-label="Status bar"
+      className="fixed bottom-0 inset-x-0 z-50 h-7 border-t border-line bg-bg2/95 backdrop-blur-md font-mono text-[11px] select-none print-hide"
+    >
       <div className="h-full px-3 sm:px-5 flex items-center justify-between text-dim">
         <div className="flex items-center gap-4 min-w-0">
           <span className="flex items-center gap-1.5 text-acc">
@@ -90,6 +93,6 @@ export default function StatusBar() {
           </a>
         </div>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -74,6 +74,11 @@ export default function AsciiField({ className }: { className?: string }) {
     let h = 0;
     let cols = 0;
     let rows = 0;
+    // adaptive quality: the cell pitch grows once if frames run slow
+    let pitch = CELL;
+    let frameEma = 16;
+    let lastT = 0;
+    let degraded = false;
 
     // mouse state, smoothed so the glow trails the cursor
     const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999, energy: 0 };
@@ -117,8 +122,8 @@ export default function AsciiField({ className }: { className?: string }) {
       ctx.font = `12px "JetBrains Mono", monospace`;
       ctx.textBaseline = "middle";
       ctx.textAlign = "center";
-      cols = Math.ceil(w / CELL) + 1;
-      rows = Math.ceil(h / CELL) + 1;
+      cols = Math.ceil(w / pitch) + 1;
+      rows = Math.ceil(h / pitch) + 1;
       buildMask();
     };
 
@@ -163,8 +168,8 @@ export default function AsciiField({ className }: { className?: string }) {
 
       for (let gy = 0; gy < rows; gy++) {
         for (let gx = 0; gx < cols; gx++) {
-          const px = gx * CELL;
-          const py = gy * CELL;
+          const px = gx * pitch;
+          const py = gy * pitch;
 
           // two octaves of drifting noise
           let v =
@@ -223,7 +228,20 @@ export default function AsciiField({ className }: { className?: string }) {
     };
 
     const loop = (t: number) => {
-      if (running && visible) draw(t);
+      if (running && visible) {
+        // frame-time EMA; if we can't hold ~40fps, coarsen the grid once
+        // (≈36% fewer cells) instead of letting the whole page stutter
+        if (lastT) frameEma = frameEma * 0.9 + (t - lastT) * 0.1;
+        lastT = t;
+        if (!degraded && frameEma > 25 && t > 3000) {
+          degraded = true;
+          pitch = CELL * 1.25;
+          resize();
+        }
+        draw(t);
+      } else {
+        lastT = 0;
+      }
       raf = requestAnimationFrame(loop);
     };
 

@@ -51,9 +51,12 @@ export default function TypeOnView({
 
   return (
     <p ref={ref} className={cn("font-mono text-[13px] text-dim mb-2", className)}>
-      <span className="text-acc">$</span>{" "}
-      <span aria-label={text}>{text.slice(0, shown)}</span>
-      {typing && <span className="caret" />}
+      {/* screen readers get the full line; the typing effect is decoration */}
+      <span className="sr-only">$ {text}</span>
+      <span aria-hidden="true">
+        <span className="text-acc">$</span> {text.slice(0, shown)}
+        {typing && <span className="caret" />}
+      </span>
     </p>
   );
 }

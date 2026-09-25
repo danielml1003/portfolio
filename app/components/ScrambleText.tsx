@@ -79,7 +79,6 @@ export default function ScrambleText({
       ref={elRef as React.Ref<any>}
       className={className}
       onMouseEnter={scrambleOnHover ? run : undefined}
-      aria-label={text}
     >
       {display}
     </Tag>
