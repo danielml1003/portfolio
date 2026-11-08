@@ -60,14 +60,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
     "@type": "Person",
     name: "Daniel Baravik",
     url: "https://danielml1003.github.io/portfolio/",
-    jobTitle: "Full-Stack Developer",
+    jobTitle: "Software Engineer",
     email: "mailto:danielbaravik1003@gmail.com",
-    address: { "@type": "PostalAddress", addressCountry: "IL" },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Kfar Saba",
+      addressCountry: "IL",
+    },
     sameAs: [
       "https://github.com/danielml1003",
       "https://www.linkedin.com/in/daniel-baravik-429b38207/",
     ],
-    knowsAbout: ["TypeScript", "React", "Python", "Rust", "Node.js", "PostgreSQL", "Docker"],
+    knowsAbout: [
+      "TypeScript",
+      "React",
+      "Node.js",
+      "PHP",
+      "Python",
+      "Rust",
+      "PostgreSQL",
+      "AWS",
+      "Docker",
+    ],
   });
   return (
     <html lang="en" className="dark">

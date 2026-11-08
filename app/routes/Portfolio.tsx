@@ -21,13 +21,13 @@ const CommandPalette = lazy(() => import("../components/CommandPalette"));
 
 export function meta(_args: Route.MetaArgs) {
   return [
-    { title: "Daniel Baravik — Full-Stack Developer" },
+    { title: "Daniel Baravik — Software Engineer" },
     {
       name: "description",
       content:
-        "The workstation of Daniel Baravik — a full-stack developer building with TypeScript, Python and Rust. Comes with a real in-page terminal. Type 'help'.",
+        "The workstation of Daniel Baravik — a software engineer shipping production systems end to end in TypeScript, PHP, Python and Rust. Comes with a real in-page terminal. Type 'help'.",
     },
-    { property: "og:title", content: "Daniel Baravik — Full-Stack Developer" },
+    { property: "og:title", content: "Daniel Baravik — Software Engineer" },
     {
       property: "og:description",
       content:

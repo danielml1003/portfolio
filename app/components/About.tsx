@@ -67,7 +67,7 @@ const TIMELINE: TimelineItem[] = [
       {
         hash: "c4d5e6f",
         type: "feat(job)",
-        msg: "full-stack developer @ LS-TECH — responsive web apps, CSS-in-JS, legacy refactors",
+        msg: "full-stack developer @ LS-TECH — 2 client web apps end-to-end in a 3-person team: React, TypeScript, Node.js, MongoDB, REST APIs, Docker deploys",
         date: "2020-21",
       },
     ],
@@ -98,8 +98,22 @@ const TIMELINE: TimelineItem[] = [
       {
         hash: "1d8f2c9",
         type: "serve(tech)",
-        msg: "IT technician, IDF — keeping systems alive; discipline and pressure included",
+        msg: "systems & communications technician, IDF — built PowerShell OS-imaging automation that other units adopted, replacing manual setup across rollouts",
         date: "2022-24",
+      },
+    ],
+  },
+  {
+    kind: "branch",
+    name: "work/unilink",
+    open: true,
+    c: CYAN,
+    commits: [
+      {
+        hash: "f0a1b2c",
+        type: "feat(job)",
+        msg: "NOC engineer @ Unilink — incident response and root-cause analysis for 100+ production servers; PHP automation that cut ~65% of manual ops; Grafana, Nagios, Netcool, ELK",
+        date: "2024-",
       },
     ],
   },
@@ -108,7 +122,7 @@ const TIMELINE: TimelineItem[] = [
     commit: {
       hash: "d4e5f6a",
       type: "feat(stack)",
-      msg: "shop-saver — full-stack python + typescript + rust, dockerized",
+      msg: "shop-saver — python + rust price-feed pipeline (2,500+ items/feed), React + MUI, Hebrew RTL, dockerized",
       date: "2025",
     },
   },
@@ -122,25 +136,29 @@ const TIMELINE: TimelineItem[] = [
     },
   },
   {
-    kind: "branch",
-    name: "work/unilink",
-    open: true,
-    c: CYAN,
-    commits: [
-      {
-        hash: "f0a1b2c",
-        type: "feat(job)",
-        msg: "NOC @ Unilink — production monitoring, incident response, eyes on the graphs",
-        date: "now",
-      },
-    ],
-  },
-  {
     kind: "commit",
     commit: {
       hash: "7b8c9d0",
       type: "feat(work)",
-      msg: "winwin-shop — freelance build, delivered to a real client",
+      msg: "winwin-shop — freelance-built affiliate marketplace, live for a real client: 125-endpoint REST API, Shopify, PayPlus payouts, OpenAI chatbot on Lambda",
+      date: "2026",
+    },
+  },
+  {
+    kind: "commit",
+    commit: {
+      hash: "3e4f5a6",
+      type: "feat(tool)",
+      msg: "devclip — rust + tauri snippet palette, fuzzy matcher, 37 tests, signed win/mac releases",
+      date: "2026",
+    },
+  },
+  {
+    kind: "commit",
+    commit: {
+      hash: "8a9b0c1",
+      type: "feat(edu)",
+      msg: "AI-first development bootcamp @ abra · GenAI with LLMs certificate (DeepLearning.AI)",
       date: "2026",
     },
   },
@@ -166,10 +184,10 @@ const TIMELINE: TimelineItem[] = [
 ];
 
 const ENV_VARS: Array<[string, string, boolean?]> = [
-  ["DANIEL_BASE", '"Israel (UTC+3)"'],
-  ["DANIEL_DAYJOB", '"NOC @ Unilink"'],
-  ["DANIEL_FOCUS", '"full-stack web"'],
-  ["DANIEL_STACK", '"py · ts · rust"'],
+  ["DANIEL_BASE", '"Kfar Saba, Israel"'],
+  ["DANIEL_DAYJOB", '"NOC engineer @ Unilink"'],
+  ["DANIEL_FOCUS", '"full-stack · backend · ops"'],
+  ["DANIEL_STACK", '"ts · php · py · rust"'],
   ["DANIEL_STATUS", '"open_to_work"', true],
   ["DANIEL_COFFEE", '"dangerous levels"'],
 ];

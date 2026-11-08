@@ -19,10 +19,14 @@ const FETCH_ROWS: Array<[string, string]> = [
   ["os", "Developer OS (curiosity-based)"],
   ["kernel", "problem-solver 6.1.0-stable"],
   ["shell", "full-stack/bash"],
-  ["frontend", "React · Tailwind CSS · Framer Motion · Vite"],
-  ["backend", "Node.js · Express · Python · GraphQL"],
-  ["databases", "PostgreSQL · MongoDB · MySQL · Firebase"],
-  ["devops", "Docker · GitHub Actions · Linux"],
+  ["languages", "TypeScript · Python · PHP · Rust · Java · SQL · PowerShell"],
+  ["frontend", "React · Next.js · Tailwind CSS · Material-UI"],
+  ["backend", "Node.js · Express · PHP · Spring Boot · Actix-Web · REST · GraphQL"],
+  ["databases", "PostgreSQL · MariaDB/MySQL · MongoDB · Elasticsearch · SQLite"],
+  ["cloud/ops", "AWS (EC2 · S3 · Lambda) · Docker · GitHub Actions · Linux"],
+  ["observability", "Grafana · Nagios · Netcool · ELK"],
+  ["ai-tooling", "Claude Code · agents · MCP · RAG · prompt engineering"],
+  ["spoken", "Hebrew · Russian · English"],
   ["uptime", "always-on, recompiles daily"],
 ];
 
@@ -38,21 +42,21 @@ const TIERS: Array<{
     note: "reach for these without thinking",
     color: "text-mint",
     dot: "bg-mint",
-    items: ["TypeScript", "React", "Python", "Node.js", "Tailwind CSS", "Git"],
+    items: ["TypeScript", "React", "Node.js", "PHP", "Python", "Git", "Linux"],
   },
   {
     label: "comfortable",
     note: "shipped real things with them",
     color: "text-cyan",
     dot: "bg-cyan",
-    items: ["PostgreSQL", "MongoDB", "Docker", "Express", "Linux", "GraphQL"],
+    items: ["PostgreSQL", "MariaDB", "MongoDB", "Docker", "AWS", "Shopify API", "Grafana", "Rust"],
   },
   {
     label: "leveling_up",
     note: "actively learning, watch this space",
     color: "text-amber",
     dot: "bg-amber",
-    items: ["Rust", "system design", "CI/CD", "Java"],
+    items: ["Kubernetes", "Spring Boot", "Actix-Web", "system design"],
   },
 ];
 

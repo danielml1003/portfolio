@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, Github, Linkedin, Mail, FileDown } from "lucide-react";
 import { ACCENTS, applyAccent } from "@/lib/accent";
-import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
+import cvPdfUrl from "../assets/Daniel-Baravik-CV.pdf";
 
 const LINKS = [
   { href: "#about", label: "about", index: "01" },

@@ -6,7 +6,7 @@ import TypeOnView from "./TypeOnView";
 import GhostIndex from "./GhostIndex";
 import { MATRIX_EVENT } from "./MatrixRain";
 import { ACCENTS, applyAccent } from "@/lib/accent";
-import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
+import cvPdfUrl from "../assets/Daniel-Baravik-CV.pdf";
 
 // the game only downloads when someone actually types `snake`
 const Snake = lazy(() => import("./Snake"));
@@ -189,9 +189,10 @@ export default function TerminalSection() {
         push(
           <Out>
             guest — but the more interesting answer:{"\n"}
-            <span className="text-ink">Daniel Baravik</span>, full-stack
-            developer. NOC @ Unilink by day, building with python · typescript
-            · rust by night. based in Israel, open to dev roles.
+            <span className="text-ink">Daniel Baravik</span>, software
+            engineer. NOC engineer @ Unilink by day; shipping full-stack
+            systems in typescript · php · python · rust by night. kfar saba,
+            israel. open to dev roles.
           </Out>
         );
         break;
@@ -204,12 +205,16 @@ export default function TerminalSection() {
               chess (2019){"\n"}
               <span className="text-cyan">c4d5e6f</span> work: full-stack dev @
               LS-TECH (2020-21){"\n"}
-              <span className="text-amber">1d8f2c9</span> service: IT
-              technician, IDF (2022-24){"\n"}
+              <span className="text-amber">1d8f2c9</span> service: systems &
+              comms technician, IDF (2022-24){"\n"}
+              <span className="text-cyan">f0a1b2c</span> work: NOC engineer @
+              Unilink (2024-){"\n"}
               <span className="text-acc">d4e5f6a</span> feat: shop-saver —
-              py/ts/rust (2025){"\n"}
-              <span className="text-cyan">f0a1b2c</span> work: NOC @ Unilink
-              (now){"\n"}
+              py/rust pipeline (2025){"\n"}
+              <span className="text-acc">7b8c9d0</span> feat: winwin-shop —
+              live marketplace, 125-endpoint API (2026){"\n"}
+              <span className="text-acc">3e4f5a6</span> feat: devclip — rust
+              snippet palette (2026){"\n"}
               <span className="text-acc">HEAD</span> chore(career): your repo
               here?
             </Out>
@@ -248,7 +253,7 @@ export default function TerminalSection() {
         else if (arg.includes("skills"))
           push(
             <Out>
-              {`{ "languages": ["TypeScript", "Python", "Rust", "Java", "SQL"],\n  "frontend": ["React", "Tailwind", "Vite"],\n  "backend": ["Node.js", "Express", "GraphQL"],\n  "data": ["PostgreSQL", "MongoDB", "MySQL"],\n  "devops": ["Docker", "CI/CD", "Linux"] }`}
+              {`{ "languages": ["TypeScript", "Python", "PHP", "Rust", "Java", "SQL", "PowerShell"],\n  "backend": ["Node.js", "Express", "Spring Boot", "Actix-Web", "REST", "GraphQL"],\n  "frontend": ["React", "Next.js", "Tailwind", "MUI"],\n  "data": ["PostgreSQL", "MariaDB", "MongoDB", "Elasticsearch", "SQLite"],\n  "cloud": ["AWS", "Docker", "GitHub Actions", "Linux", "Grafana", "ELK"] }`}
             </Out>
           );
         else if (arg.includes("cv")) {
@@ -263,16 +268,17 @@ export default function TerminalSection() {
         push(
           <Out>
             <div>
-              <span className="text-acc">shop-saver</span> — full-stack price
-              tracker (python/ts/rust + docker)
+              <span className="text-acc">winwin-shop</span> — live affiliate +
+              UGC marketplace for a client (php 8.4, shopify, payplus, aws
+              lambda, openai) — private repo
             </div>
             <div>
-              <span className="text-acc">winwin-shop</span> — client e-commerce
-              build (private repo — ask me about it)
+              <span className="text-acc">shop-saver</span> — cheapest grocery
+              basket across israeli chains (python + rust pipeline, react)
             </div>
             <div>
-              <span className="text-acc">music-genre-classification</span> — ML
-              audio experiments (python)
+              <span className="text-acc">devclip</span> — snippet palette for
+              developers (rust, tauri v2, 37 tests, signed releases)
             </div>
             <div className="mt-1">
               full list:{" "}
@@ -293,11 +299,11 @@ export default function TerminalSection() {
         push(
           <Out>
             <span className="text-mint">[daily_driver]</span> typescript ·
-            react · python · node · tailwind · git{"\n"}
-            <span className="text-cyan">[comfortable]</span> postgres · mongo ·
-            docker · express · linux{"\n"}
-            <span className="text-amber">[leveling_up]</span> rust · system
-            design · ci/cd
+            react · node · php · python · git · linux{"\n"}
+            <span className="text-cyan">[comfortable]</span> postgres · mariadb
+            · mongo · docker · aws · shopify api · grafana · rust{"\n"}
+            <span className="text-amber">[leveling_up]</span> kubernetes ·
+            spring boot · actix-web · system design
           </Out>
         );
         break;
@@ -474,6 +480,8 @@ export default function TerminalSection() {
             inertial scroll, glow, 3d tilt{"\n"}
             <span className="text-acc">v3.2</span> craft pass — mobile menu,
             AA contrast, print resume, structured data{"\n"}
+            <span className="text-acc">v3.3</span> cv sync — software engineer
+            era: live marketplace, devclip, real numbers{"\n"}
             <span className="text-faint">next: whoever comes after.</span>
           </Out>
         );

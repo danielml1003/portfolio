@@ -28,6 +28,10 @@ interface ProjectType {
   demo_url?: string | null;
   technologies: string[];
   languages?: Language[];
+  /** code-comment lines shown instead of language stats */
+  note?: string[];
+  /** footer label for projects without public links */
+  footnote?: string;
   year?: string;
   status?: string;
   visibility?: string;
@@ -97,8 +101,12 @@ function LangStats({
             compact ? "mt-3 p-4" : "mt-6 p-5"
           }`}
         >
-          <p>{"// client work — repo private"}</p>
-          <p>{"// happy to walk through the build live"}</p>
+          {(project.note ?? [
+            "// client work — repo private",
+            "// happy to walk through the build live",
+          ]).map((line) => (
+            <p key={line}>{line}</p>
+          ))}
         </div>
       )}
     </div>
@@ -144,7 +152,7 @@ function CardFooter({
       {!project.github_url && !project.demo_url && (
         <span className={`flex items-center gap-1.5 ${pad} text-faint`}>
           <Lock className="w-3.5 h-3.5" />
-          source: client-owned
+          {project.footnote ?? "source: client-owned"}
         </span>
       )}
       <span
@@ -154,7 +162,9 @@ function CardFooter({
       >
         <span
           className={`w-1.5 h-1.5 rounded-full ${
-            project.status === "active" ? "bg-mint" : "bg-amber"
+            project.status === "active" || project.status === "live"
+              ? "bg-mint"
+              : "bg-amber"
           }`}
         />
         {project.status}

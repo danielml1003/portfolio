@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { ACCENTS, applyAccent } from "@/lib/accent";
 import { MATRIX_EVENT } from "./MatrixRain";
-import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
+import cvPdfUrl from "../assets/Daniel-Baravik-CV.pdf";
 
 interface Action {
   id: string;

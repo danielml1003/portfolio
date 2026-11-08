@@ -9,13 +9,13 @@ import { ArrowDown, Github, Linkedin, Mail, FileDown } from "lucide-react";
 import AsciiField from "./AsciiField";
 import ScrambleText from "./ScrambleText";
 import Magnetic from "./Magnetic";
-import cvPdfUrl from "../../Daniel Baravik - junior developer..pdf";
+import cvPdfUrl from "../assets/Daniel-Baravik-CV.pdf";
 
 const ROLES = [
-  "full-stack developer",
-  "python · typescript · rust",
-  "builds things end-to-end",
-  "open to junior roles",
+  "software engineer",
+  "typescript · php · python · rust",
+  "ships production systems end to end",
+  "noc by day, builder by night",
 ];
 
 function useTypewriter(words: string[]) {
@@ -152,9 +152,10 @@ export default function Hero() {
             </p>
 
             <p className="mt-6 max-w-xl font-mono text-[13px] sm:text-sm leading-relaxed text-dim">
-              I design and ship complete things — from the database schema to
-              the last pixel. Currently hunting for a team where I can build,
-              break, learn and repeat.
+              I ship production systems end to end — REST APIs, data pipelines,
+              monitoring, UI. Freelance-built a live marketplace behind a
+              125-endpoint API; at my day job I keep 100+ servers observable and
+              automated away ~65% of the manual ops.
             </p>
 
             {/* CTAs */}

@@ -2,12 +2,31 @@
   "projects": [
     {
       "id": "1",
+      "name": "winwin-shop",
+      "tagline": "live affiliate + UGC marketplace",
+      "description": "Freelance client work, live and in active use: a marketplace where businesses pay content creators for the sales they bring. Per-creator Shopify discount codes with click and conversion tracking; orders captured by a webhook + 5-minute cron hybrid so nothing is lost when a webhook is missed; monthly creator payouts via PayPlus card vaulting behind a 125-endpoint REST API; an OpenAI support chatbot served from AWS Lambda.",
+      "github_url": null,
+      "demo_url": null,
+      "technologies": ["PHP 8.4", "MariaDB", "Shopify API", "PayPlus", "AWS Lambda", "OpenAI API"],
+      "note": [
+        "// client work — repo private",
+        "// 125-endpoint REST API · webhook + cron capture",
+        "// PayPlus payouts · OpenAI chatbot on Lambda"
+      ],
+      "footnote": "source: client-owned · live in production",
+      "year": "2026",
+      "status": "live",
+      "visibility": "private",
+      "featured": true
+    },
+    {
+      "id": "2",
       "name": "shop-saver",
-      "tagline": "full-stack price tracker",
-      "description": "Full-stack app with separate backend, frontend and service modules. Python + TypeScript + Rust, orchestrated with Docker Compose and an init.sql bootstrap.",
+      "tagline": "cheapest grocery basket, geolocated",
+      "description": "Finds the cheapest nearby grocery basket across Israeli supermarket chains. A Python + Rust ingestion pipeline pulls the chains' daily price feeds (2,500+ items each) with deduplication and retry logic; React + MUI frontend with Hebrew RTL support, all on PostgreSQL in Docker.",
       "github_url": "https://github.com/danielml1003/shop-saver",
       "demo_url": null,
-      "technologies": ["Python", "TypeScript", "Rust", "Docker"],
+      "technologies": ["Python", "Rust", "PostgreSQL", "React", "MUI", "Docker"],
       "languages": [
         { "name": "Python", "pct": 48, "color": "#3572A5" },
         { "name": "TypeScript", "pct": 32, "color": "#3178C6" },
@@ -19,31 +38,20 @@
       "featured": true
     },
     {
-      "id": "2",
-      "name": "winwin-shop",
-      "tagline": "client e-commerce build",
-      "description": "Freelance work for a real client — an e-commerce shop built and shipped end-to-end: storefront, catalog and checkout flow. The code belongs to the client, so the repo stays private — but I'm happy to walk through the build.",
-      "github_url": null,
-      "demo_url": null,
-      "technologies": ["e-commerce", "freelance", "full-stack"],
-      "year": "2026",
-      "status": "delivered",
-      "visibility": "private",
-      "featured": true
-    },
-    {
       "id": "3",
-      "name": "music-genre-classification",
-      "tagline": "ML audio experiments",
-      "description": "Python experiments for classifying music by genre — client/server scripts for inference plus a small QML UI prototype on top.",
-      "github_url": "https://github.com/danielml1003/music-genre-classification",
+      "name": "devclip",
+      "tagline": "snippet palette for developers",
+      "description": "Turns throwaway developer snippets — shell commands, SQL, regexes — into a searchable library. A global hotkey opens a palette that pastes straight into the app you were in. Fuzzy matcher aware of word boundaries and camelCase, ranked by recency and frequency; pure-Rust core with 37 unit tests, signed Windows and macOS releases built in CI.",
+      "github_url": "https://github.com/danielml1003/devclip",
       "demo_url": null,
-      "technologies": ["Python", "QML", "Machine Learning"],
-      "languages": [
-        { "name": "Python", "pct": 86, "color": "#3572A5" },
-        { "name": "QML", "pct": 14, "color": "#44A51C" }
+      "technologies": ["Rust", "Tauri v2", "SQLite", "TypeScript", "GitHub Actions"],
+      "note": [
+        "// pure-Rust core · 37 unit tests",
+        "// fuzzy match: word boundaries + camelCase",
+        "// signed windows + macos releases via CI"
       ],
-      "year": "2024",
+      "footnote": "desktop app · signed releases",
+      "year": "2026",
       "status": "shipped",
       "visibility": "public",
       "featured": true
